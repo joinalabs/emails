@@ -23,6 +23,8 @@ The package is published to the **[GitHub Packages npm registry](https://docs.gi
 
 **Visibility in the browser (e.g. incognito):** GitHub controls each package’s visibility under your organisation’s **Packages** tab. If the **repository is private**, linked packages are often **private** by default—anonymous users then see nothing useful. To allow discovery without logging in, open the **`@joinalabs/emails`** package on GitHub → **Package settings** → **Change package visibility** → **Public** (requires org permissions). Existing versions published while the package was private stay until you change visibility or republish; `access: "public"` mainly helps **new** publishes declare intent.
 
+**Why [the org Packages page filtered by `repo_name=emails`](https://github.com/orgs/joinalabs/packages?repo_name=emails) can show “0 packages”:** that view is only a filtered list. You still get an empty table if no version was ever published successfully, if you are logged out and every package is **private**, or if GitHub’s filter does not match how the npm package is linked to the repo. Prefer **this repository → Packages** (sidebar) or the direct page `https://github.com/joinalabs/emails/pkgs/npm/emails` after a green publish job; the workflow also prints that URL in the job log under **Link to package on GitHub**.
+
 CI ([`.github/workflows/publish.yml`](.github/workflows/publish.yml)) runs on every **push to `main`** and publishes with **`GITHUB_TOKEN`** (`permissions: packages: write`). You do **not** need an npmjs account, **NPM_TOKEN**, or npm “trusted publisher” setup for this repo.
 
 #### Every release

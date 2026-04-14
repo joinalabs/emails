@@ -33,3 +33,10 @@ jobs:
         run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Link to package on GitHub
+        if: success()
+        run: |
+          echo "If publish succeeded, open this repo’s npm package page:"
+          echo "https://github.com/${GITHUB_REPOSITORY}/pkgs/npm/emails"
+          echo "(The org list filtered by repo_name= can stay empty until a linked package exists or filters match.)"
