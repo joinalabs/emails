@@ -15,6 +15,63 @@ Joina email templates for event workflows (React Email + TypeScript). The main A
 - Node.js 20+
 - `react` and `react-dom` matching the `peerDependencies` in `package.json` (provided by the consumer or installed locally for development)
 
+## Publishing and consuming from the Joina API
+
+### Publishing (maintainers)
+
+The package is **public** on the npm registry (`publishConfig.access: "public"` for the `@joinalabs` scope).
+
+1. Create an [npm access token](https://docs.npmjs.com/creating-and-viewing-access-tokens) (automation or granular) with permission to publish packages under `@joinalabs`.
+2. In this GitHub repository, add a secret named **`NPM_TOKEN`** containing that token.
+3. Bump the version in [`package.json`](package.json) (for example `npm version patch` / `minor` / `major`, then push commits).
+4. Create and push a **git tag** that matches the release (for example `v0.2.0` after setting `"version": "0.2.0"`). Pushing a tag matching `v*.*.*` runs [`.github/workflows/publish.yml`](.github/workflows/publish.yml), which runs `npm ci` and `npm publish`. The `prepublishOnly` script builds `dist/`, runs Biome, and runs `tsc --noEmit` before publish.
+
+Ensure the `@joinalabs` scope exists on npm and the token’s account is allowed to publish to it.
+
+**License:** `package.json` currently sets `"license": "UNLICENSED"`. Publishing publicly does not replace legal review—change `license` if your organisation standardises on another SPDX id.
+
+### Installing in the Joina API
+
+```bash
+npm install @joinalabs/emails
+```
+
+Use a semver range or pin a version in production (for example `"@joinalabs/emails": "0.1.0"`). The API must satisfy **Node 20+** and install **`react` / `react-dom`** versions compatible with the `peerDependencies` in this package (the Joina API typically already includes them).
+
+### Usage (ESM)
+
+The package is **ESM-only** (`"type": "module"` and the `exports` map in `package.json`). Import render helpers from the package entry; each `render*Html` returns **`Promise<string>`** (HTML). **Email subjects** are not produced by this package—the API sets `Subject` (and any provider-specific metadata) when sending.
+
+```typescript
+import {
+  renderTicketQrCodeHtml,
+  type TicketQrCodeEmailProps,
+  type EmailTheme,
+} from "@joinalabs/emails";
+
+const theme: EmailTheme = {
+  primaryColor: "#006FEE",
+  brandName: "Producer name",
+};
+
+const html = await renderTicketQrCodeHtml({
+  theme,
+  ownerName: "Maria",
+  ownerEmail: "maria@example.com",
+  eventName: "Show name",
+  fareKind: "full",
+  qrImageSrc: "https://example.com/qr.png", // or cid: / data:image/png;base64,...
+} satisfies TicketQrCodeEmailProps);
+
+// Pass `html` to Resend, SES, SendGrid, Nodemailer, etc.
+```
+
+See [Templates and render helpers](#templates-and-render-helpers) for all `render*Html` helpers and [Whitelabel theme](#whitelabel-theme-emailtheme) for `EmailTheme` fields.
+
+### Alternative: install from a release tarball
+
+If a `.tgz` is attached to a [GitHub Release](https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository), consumers can run `npm install https://github.com/ORG/REPO/releases/download/vX.Y.Z/package.tgz` without hitting the npm registry. Node 20+ and the React peers still apply.
+
 ## Scripts
 
 | Script | Description |

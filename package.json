@@ -12,7 +12,8 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "scripts/husky-if-present.mjs"
   ],
   "scripts": {
     "build": "tsup",
@@ -21,7 +22,8 @@
     "typecheck": "tsc --noEmit",
     "preview:html": "npm run build && node scripts/render-email-samples.mjs",
     "dev": "email dev",
-    "prepare": "husky"
+    "prepare": "node scripts/husky-if-present.mjs",
+    "prepublishOnly": "npm run build && npm run check && npm run typecheck"
   },
   "engines": {
     "node": ">=20"
@@ -47,5 +49,11 @@
     "typescript": "^5.8.0"
   },
   "license": "UNLICENSED",
-  "private": true
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joinalabs/emails.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
 }
