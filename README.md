@@ -19,14 +19,18 @@ Joina email templates for event workflows (React Email + TypeScript). The main A
 
 ### Publishing (maintainers)
 
-The package is published to the **[GitHub Packages npm registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry)** (`https://npm.pkg.github.com`), not npmjs.com. [`publishConfig.registry`](package.json) is set accordingly.
+The package is published to the **[GitHub Packages npm registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry)** (`https://npm.pkg.github.com`), not npmjs.com. [`publishConfig`](package.json) sets `registry` and **`access: "public"`** so new publishes are intended as **public** packages on GitHub.
 
-CI ([`.github/workflows/publish.yml`](.github/workflows/publish.yml)) runs on **pushed tags** `v*.*.*` and publishes with **`GITHUB_TOKEN`** (`permissions: packages: write`). You do **not** need an npmjs account, **NPM_TOKEN**, or npm “trusted publisher” setup for this repo.
+**Visibility in the browser (e.g. incognito):** GitHub controls each package’s visibility under your organisation’s **Packages** tab. If the **repository is private**, linked packages are often **private** by default—anonymous users then see nothing useful. To allow discovery without logging in, open the **`@joinalabs/emails`** package on GitHub → **Package settings** → **Change package visibility** → **Public** (requires org permissions). Existing versions published while the package was private stay until you change visibility or republish; `access: "public"` mainly helps **new** publishes declare intent.
+
+CI ([`.github/workflows/publish.yml`](.github/workflows/publish.yml)) runs on every **push to `main`** and publishes with **`GITHUB_TOKEN`** (`permissions: packages: write`). You do **not** need an npmjs account, **NPM_TOKEN**, or npm “trusted publisher” setup for this repo.
 
 #### Every release
 
-1. Bump the version in [`package.json`](package.json) (for example `npm version patch` / `minor` / `major`, then push commits).
-2. Create and push a **git tag** that matches the version (for example `v0.2.0` for `"version": "0.2.0"`). The workflow runs `npm ci`, then `npm publish` (`prepublishOnly` runs build, Biome, and `tsc` first).
+1. Bump the **`version`** field in [`package.json`](package.json) whenever you intend to publish a new package (for example `npm version patch` / `minor` / `major`, or edit the field and commit). The registry rejects publishing the same version twice.
+2. Merge or **push to `main`**. The workflow runs `npm ci`, then `npm publish` (`prepublishOnly` runs build, Biome, and `tsc` first).
+
+If you push to `main` without bumping `version`, the job may **fail** at `npm publish` because the version already exists on GitHub Packages. Use tags or release branches locally if you prefer not to publish on every merge; the workflow only reflects the current `main` policy.
 
 **If `npm publish` fails in CI:** confirm the workflow has `packages: write`, the package name stays **`@joinalabs/emails`** (scope must match the GitHub owner/org), and [`repository`](package.json) points at this repository. See [GitHub Packages troubleshooting](https://docs.github.com/en/packages/learn-github-packages/about-permissions-for-github-packages).
 

@@ -1,6 +1,6 @@
 {
   "name": "@joinalabs/emails",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "React Email templates for Joina event SaaS flows",
   "type": "module",
   "main": "./dist/index.js",
@@ -54,6 +54,7 @@
     "url": "git+https://github.com/joinalabs/emails.git"
   },
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
+    "registry": "https://npm.pkg.github.com",
+    "access": "public"
   }
 }
