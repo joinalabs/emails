@@ -1,0 +1,57 @@
+---
+description: Joina project spec — stack (React Email, TS, HeroUI, Biome, Husky), package consumed by the API, and whitelabel themes
+alwaysApply: true
+---
+
+# Project specification (Joina — emails)
+
+## Required stack
+
+- **Emails**: use [React Email](https://react.email/) (`@react-email/components`, documentation patterns) for development and HTML compatible with email clients. Local **preview** uses `npm run dev` (React Email CLI): implement templates under the `emails/` directory (see README); that server does not send real mail.
+- **Language**: **TypeScript** for all package code.
+- **UI/UX**: [HeroUI](https://heroui.com/) — **high fidelity** to the library: official documentation, exported components and APIs, composition patterns, theme, and accessibility; do not reimplement what HeroUI already provides or introduce another design system without an explicit team decision.
+- **Consistency with ticketing sites**: reuse **theme tokens and decisions** aligned with HeroUI where markup is React Email (sent HTML follows `@react-email/components`, but palette/spacing/typography reflect the same system).
+- **Code quality**: [Biome](https://biomejs.dev/) for formatting and linting; prefer `biome check` in local/CI flows where appropriate.
+- **Git hooks**: [Husky](https://typicode.github.io/husky/) for pre-hooks that run quality steps (Biome and other project scripts from `package.json`) **before** completing a commit.
+
+## Purpose and integration
+
+This repository is a **package** that the **main Joina API** imports and triggers according to flow events (e.g. ticket purchase, user registration, password recovery). Avoid coupling API business logic here: expose clear templates/render functions for the API to consume.
+
+**Sending:** production email must be sent from the **API (or another trusted server)** using a real provider (Resend, SES, SMTP, etc.) after rendering HTML with `render` / package helpers. Do **not** use the React Email **preview dev server** (`email dev`) to deliver mail—it is for local template preview only.
+
+## Ticket emails
+
+- **Purchased / general ticket**: `TicketQrCodeEmail` (QR in body + optional link) vs `TicketPortalEmail` (required `ticketUrl` only — authenticated ticket screen, no QR in the email).
+- **Complimentary**: `CourtesyTicketQrEmail` (QR + optional `ctaUrl`) vs `CourtesyTicketEmail` (link only via `ctaUrl`).
+
+## Themes and whitelabel
+
+- Every template must accept **theme configuration** (colours, fonts, logos, brand copy where relevant) via **props or a typed theme object** — no hard-coded “producer-specific” styling without parameters.
+- **`HeaderLogo`:** ingresso and ticket-purchase-receipt templates pass `headline` (event name); the header is left-aligned with `theme.brandName` on the line below, plus a small `theme.logoUrl` when the API supplies a producer logo. Producer-only templates omit `headline` and show producer `logoUrl` + `brandName` only.
+- **Whitelabel** goal: the same conceptual flexibility as the platform’s ticketing sites (per producer/event). Document expected theme props on the package’s public exports.
+
+### Example (typed theme)
+
+```typescript
+interface EmailTheme {
+  primaryColor: string;
+  logoUrl?: string;
+  brandName: string;
+}
+
+interface TicketConfirmationProps {
+  theme: EmailTheme;
+  // ...event/ticket data
+}
+```
+
+## Best practices
+
+- When styling email, respect client limitations (inline styles / React Email Tailwind per project setup); sent markup uses `@react-email/components`, keeping **visual tokens/decisions** consistent with HeroUI on the sites.
+- New Husky hooks should chain the same checks the team defines in `package.json` (do not skip Biome if it is a repository requirement).
+
+## Language
+
+- **Documentation** (README, this rules file, developer-facing comments): **English**.
+- **End-user email copy** (default template strings shown to recipients): **Portuguese (Brazil)** unless overridden via `copy` props or API-supplied dynamic fields.

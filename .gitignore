@@ -1,0 +1,6 @@
+node_modules/
+dist/
+preview-output/
+.react-email/
+*.log
+.DS_Store
