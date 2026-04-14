@@ -54,6 +54,6 @@
     "url": "git+https://github.com/joinalabs/emails.git"
   },
   "publishConfig": {
-    "access": "public"
+    "registry": "https://npm.pkg.github.com"
   }
 }

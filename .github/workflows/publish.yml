@@ -1,22 +1,25 @@
-name: Publish to npm
+name: Publish to GitHub Packages
 
 on:
   push:
     tags:
       - "v*.*.*"
 
+# Publish to npm.pkg.github.com using the workflow GITHUB_TOKEN (no npmjs account or NPM_TOKEN).
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   publish:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
-          registry-url: https://registry.npmjs.org
+          registry-url: https://npm.pkg.github.com
           cache: npm
 
       - name: Install dependencies
@@ -25,4 +28,4 @@ jobs:
       - name: Publish package
         run: npm publish
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

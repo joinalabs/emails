@@ -19,24 +19,40 @@ Joina email templates for event workflows (React Email + TypeScript). The main A
 
 ### Publishing (maintainers)
 
-The package is **public** on the npm registry (`publishConfig.access: "public"` for the `@joinalabs` scope).
+The package is published to the **[GitHub Packages npm registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry)** (`https://npm.pkg.github.com`), not npmjs.com. [`publishConfig.registry`](package.json) is set accordingly.
 
-1. Create an [npm access token](https://docs.npmjs.com/creating-and-viewing-access-tokens) (automation or granular) with permission to publish packages under `@joinalabs`.
-2. In this GitHub repository, add a secret named **`NPM_TOKEN`** containing that token.
-3. Bump the version in [`package.json`](package.json) (for example `npm version patch` / `minor` / `major`, then push commits).
-4. Create and push a **git tag** that matches the release (for example `v0.2.0` after setting `"version": "0.2.0"`). Pushing a tag matching `v*.*.*` runs [`.github/workflows/publish.yml`](.github/workflows/publish.yml), which runs `npm ci` and `npm publish`. The `prepublishOnly` script builds `dist/`, runs Biome, and runs `tsc --noEmit` before publish.
+CI ([`.github/workflows/publish.yml`](.github/workflows/publish.yml)) runs on **pushed tags** `v*.*.*` and publishes with **`GITHUB_TOKEN`** (`permissions: packages: write`). You do **not** need an npmjs account, **NPM_TOKEN**, or npm “trusted publisher” setup for this repo.
 
-Ensure the `@joinalabs` scope exists on npm and the token’s account is allowed to publish to it.
+#### Every release
 
-**License:** `package.json` currently sets `"license": "UNLICENSED"`. Publishing publicly does not replace legal review—change `license` if your organisation standardises on another SPDX id.
+1. Bump the version in [`package.json`](package.json) (for example `npm version patch` / `minor` / `major`, then push commits).
+2. Create and push a **git tag** that matches the version (for example `v0.2.0` for `"version": "0.2.0"`). The workflow runs `npm ci`, then `npm publish` (`prepublishOnly` runs build, Biome, and `tsc` first).
+
+**If `npm publish` fails in CI:** confirm the workflow has `packages: write`, the package name stays **`@joinalabs/emails`** (scope must match the GitHub owner/org), and [`repository`](package.json) points at this repository. See [GitHub Packages troubleshooting](https://docs.github.com/en/packages/learn-github-packages/about-permissions-for-github-packages).
+
+**License:** `package.json` currently sets `"license": "UNLICENSED"`. Publishing does not replace legal review—change `license` if your organisation standardises on another SPDX id.
 
 ### Installing in the Joina API
 
-```bash
-npm install @joinalabs/emails
-```
+The Joina API (and any other consumer) must tell npm to load **`@joinalabs`** packages from GitHub Packages, then authenticate with a token that can **read** packages for the `joinalabs` org.
 
-Use a semver range or pin a version in production (for example `"@joinalabs/emails": "0.1.0"`). The API must satisfy **Node 20+** and install **`react` / `react-dom`** versions compatible with the `peerDependencies` in this package (the Joina API typically already includes them).
+1. In the API repository, add an [`.npmrc`](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry#installing-a-package) (or merge into an existing one):
+
+   ```ini
+   @joinalabs:registry=https://npm.pkg.github.com
+   ```
+
+2. For **`npm install`**, set a token with at least **`read:packages`** (classic PAT) or the equivalent **read** permission on a fine-grained PAT for the `joinalabs` organisation:
+
+   ```bash
+   # Local or CI: use env var (do not commit the token)
+   export NODE_AUTH_TOKEN=ghp_xxx   # or use ${{ secrets.GITHUB_TOKEN }} / PAT in GitHub Actions
+   npm install @joinalabs/emails
+   ```
+
+   In **GitHub Actions** for another repo under `joinalabs`, you can use a secret such as `NODE_AUTH_TOKEN` holding a PAT with `read:packages`, or a dedicated machine user token. The default **`GITHUB_TOKEN`** of a workflow only has access to the **current** repository’s packages unless you grant broader access via org settings or a PAT.
+
+3. Pin or range the version as usual (for example `"@joinalabs/emails": "^0.1.0"`). **Node 20+** and **`react` / `react-dom`** matching `peerDependencies` are still required.
 
 ### Usage (ESM)
 
@@ -70,7 +86,7 @@ See [Templates and render helpers](#templates-and-render-helpers) for all `rende
 
 ### Alternative: install from a release tarball
 
-If a `.tgz` is attached to a [GitHub Release](https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository), consumers can run `npm install https://github.com/ORG/REPO/releases/download/vX.Y.Z/package.tgz` without hitting the npm registry. Node 20+ and the React peers still apply.
+If a `.tgz` is attached to a [GitHub Release](https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository), consumers can run `npm install https://github.com/ORG/REPO/releases/download/vX.Y.Z/package.tgz` without configuring the GitHub Packages registry. Node 20+ and the React peers still apply.
 
 ## Scripts
 
