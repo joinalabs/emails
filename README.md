@@ -180,6 +180,7 @@ Set `copy.qrAlt` when you need a translated or more specific image `alt` text.
 | Ticket purchase receipt | `TicketPurchaseReceiptEmail` | `renderTicketPurchaseReceiptHtml` |
 | Ticket — QR in email | `TicketQrCodeEmail` | `renderTicketQrCodeHtml` |
 | Ticket — link to authenticated screen only | `TicketPortalEmail` | `renderTicketPortalHtml` |
+| Ticket — transfer received (new holder, link only) | `TicketTransferReceivedEmail` | `renderTicketTransferReceivedHtml` |
 | Magic link (logged-in event area) | `EventMagicLinkEmail` | `renderEventMagicLinkHtml` |
 | Complimentary ticket — link only | `CourtesyTicketEmail` | `renderCourtesyTicketHtml` |
 | Complimentary ticket — QR in email | `CourtesyTicketQrEmail` | `renderCourtesyTicketQrHtml` |
@@ -197,12 +198,13 @@ Each `render*Html(props)` returns `Promise<string>` (HTML) using `@react-email/r
 
 ### Ticket email variants
 
-Ingresso-related flows ship as **two variants** each:
+Ingresso-related flows ship as **two variants** each (plus transfer):
 
 - **QR no e-mail** — `TicketQrCodeEmail` / `CourtesyTicketQrEmail`: the API supplies `qrImageSrc`; optional `ctaUrl` opens the same ticket in the browser.
 - **Só portal** — `TicketPortalEmail` / `CourtesyTicketEmail`: no image in the message; the API supplies a single authenticated URL (`ticketUrl` or `ctaUrl`) so the user opens their ticket on your site.
+- **Transferência** — `TicketTransferReceivedEmail`: same detail card + **CTA only** (no QR) for the **new** holder after a transfer; pass `ticketUrl` and the new `ownerName` / `ownerEmail`. Optional **`transferrerName`** shows `copy.transferrerLine` with `{name}`.
 
-All four ingresso templates share the same **detail card** (via `buildTicketIngressoDetailRows` if you extend layouts yourself):
+All ingresso templates above share the same **detail card** (via `buildTicketIngressoDetailRows` if you extend layouts yourself):
 
 | Data | Props / notes |
 | --- | --- |
@@ -269,7 +271,7 @@ const html = await renderTicketPurchaseReceiptHtml(props);
 // send `html` through your mail provider
 ```
 
-Reusable blocks (`EmailLayout`, `HeaderLogo`, `EmailDetailList`, `PrimaryButton`, `FooterLegal`, **`buildTicketIngressoDetailRows`**, **`TicketFareKind`**) are also exported for internal extensions. `EmailDetailList` renders the compact title/value card used on tickets, courtesy, ticket purchase receipt order meta, and producer invite (with optional `footer` slot).
+Reusable blocks (`EmailLayout`, `HeaderLogo`, `EmailDetailList`, `PrimaryButton`, `FooterLegal`, **`buildTicketIngressoDetailRows`**, **`TicketFareKind`**) are also exported for internal extensions. `EmailDetailList` renders the compact title/value card used on tickets (including transfer received), courtesy, ticket purchase receipt order meta, and producer invite (with optional `footer` slot).
 
 ## Suggested backlog (prioritise with product)
 

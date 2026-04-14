@@ -18,6 +18,8 @@ import type { TicketPurchaseReceiptEmailProps } from "../../emails/ticket-purcha
 import { TicketPurchaseReceiptEmail } from "../../emails/ticket-purchase-receipt.js";
 import type { TicketQrCodeEmailProps } from "../../emails/ticket-qr.js";
 import { TicketQrCodeEmail } from "../../emails/ticket-qr.js";
+import type { TicketTransferReceivedEmailProps } from "../../emails/ticket-transfer-received.js";
+import { TicketTransferReceivedEmail } from "../../emails/ticket-transfer-received.js";
 
 async function renderEmail(element: ReactElement): Promise<string> {
   return render(element);
@@ -35,6 +37,12 @@ export async function renderTicketQrCodeHtml(props: TicketQrCodeEmailProps): Pro
 
 export async function renderTicketPortalHtml(props: TicketPortalEmailProps): Promise<string> {
   return renderEmail(<TicketPortalEmail {...props} />);
+}
+
+export async function renderTicketTransferReceivedHtml(
+  props: TicketTransferReceivedEmailProps,
+): Promise<string> {
+  return renderEmail(<TicketTransferReceivedEmail {...props} />);
 }
 
 export async function renderEventMagicLinkHtml(props: EventMagicLinkEmailProps): Promise<string> {

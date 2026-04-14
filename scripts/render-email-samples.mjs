@@ -20,6 +20,7 @@ const {
   renderTicketPurchaseReceiptHtml,
   renderTicketPortalHtml,
   renderTicketQrCodeHtml,
+  renderTicketTransferReceivedHtml,
 } = await import(join(root, "dist", "index.js"));
 
 /** Visible PNG QR for HTML preview — keep in sync with `emails/preview-qr-placeholder.ts`. */
@@ -107,6 +108,24 @@ const samples = [
         fareKind: "full",
         lotName: "1º lote",
         ticketUrl: "https://example.com/ingresso/autenticado/TCK-preview-001",
+      }),
+  },
+  {
+    name: "ticket-transfer-received",
+    render: () =>
+      renderTicketTransferReceivedHtml({
+        theme,
+        ownerName: "Carlos Novo",
+        ownerEmail: "carlos.novo@example.com",
+        eventName: "Show ao vivo",
+        eventDate: "20/04/2026",
+        eventTime: "21:00",
+        venue: "Arena Example, São Paulo",
+        venueMapsUrl: "https://www.google.com/maps/search/?api=1&query=Arena+Example+São+Paulo",
+        fareKind: "full",
+        lotName: "1º lote",
+        ticketUrl: "https://example.com/ingresso/transferido/TCK-preview-002",
+        transferrerName: "Maria Silva",
       }),
   },
   {

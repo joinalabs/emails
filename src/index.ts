@@ -46,6 +46,11 @@ export {
   type TicketQrCodeEmailProps,
 } from "../emails/ticket-qr.js";
 export {
+  type TicketTransferReceivedCopy,
+  TicketTransferReceivedEmail,
+  type TicketTransferReceivedEmailProps,
+} from "../emails/ticket-transfer-received.js";
+export {
   type BuildTicketIngressoDetailRowsInput,
   buildTicketIngressoDetailRows,
   EmailDetailList,
@@ -73,6 +78,7 @@ export {
   renderTicketPortalHtml,
   renderTicketPurchaseReceiptHtml,
   renderTicketQrCodeHtml,
+  renderTicketTransferReceivedHtml,
 } from "./render/renderers.js";
 export type { EmailTheme } from "./theme/types.js";
 export { defaultEmailThemeTokens } from "./theme/types.js";
