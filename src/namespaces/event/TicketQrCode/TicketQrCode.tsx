@@ -1,6 +1,7 @@
-/** Ingresso — variante com QR Code embutido no e-mail (opcionalmente com link adicional). */
-import { Column, Img, Row, Section, Text } from "@react-email/components";
+/** Ticket — variant with QR code embedded in the email (optionally with an additional link). */
+
 import type { FC } from "react";
+import { Column, Img, Row, Section, Text } from "react-email";
 import {
   buildTicketIngressoDetailRows,
   EmailDetailList,
@@ -9,12 +10,9 @@ import {
   HeaderLogo,
   PrimaryButton,
   type TicketFareKind,
-} from "../src/components/index.js";
-import type { EmailTheme } from "../src/theme/types.js";
-import { defaultEmailThemeTokens } from "../src/theme/types.js";
-import { placeholderQrSrc, previewTheme } from "./_preview-fixtures.js";
-
-export type { TicketFareKind };
+} from "../../../components/index.js";
+import type { EmailTheme } from "../../../theme/types.js";
+import { defaultEmailThemeTokens } from "../../../theme/types.js";
 
 export interface TicketQrCodeCopy {
   subjectPreview?: string;
@@ -32,7 +30,7 @@ export interface TicketQrCodeCopy {
   securityNote?: string;
 }
 
-export interface TicketQrCodeEmailProps {
+export interface TicketQrCodeProps {
   theme: EmailTheme;
   ownerName: string;
   ownerEmail: string;
@@ -70,7 +68,7 @@ const defaultCopy: Required<TicketQrCodeCopy> = {
   securityNote: "Se você não reconhece esta compra, pode ignorar este e-mail.",
 };
 
-export const TicketQrCodeEmail: FC<TicketQrCodeEmailProps> = ({
+export const TicketQrCode: FC<TicketQrCodeProps> = ({
   theme,
   ownerName,
   ownerEmail,
@@ -151,24 +149,3 @@ export const TicketQrCodeEmail: FC<TicketQrCodeEmailProps> = ({
     </EmailLayout>
   );
 };
-
-const ticketQrPreviewProps = {
-  theme: previewTheme,
-  ownerName: "Maria Silva",
-  ownerEmail: "maria@example.com",
-  eventName: "Show ao vivo",
-  eventDate: "20/04/2026",
-  eventTime: "21:00",
-  venue: "Arena Example, São Paulo",
-  venueMapsUrl: "https://www.google.com/maps/search/?api=1&query=Arena+Example+São+Paulo",
-  fareKind: "full" as const,
-  lotName: "1º lote",
-  qrImageSrc: placeholderQrSrc,
-  ctaUrl: "https://example.com/ingresso/TCK-preview-001",
-} satisfies TicketQrCodeEmailProps;
-
-function Email(props: TicketQrCodeEmailProps) {
-  return <TicketQrCodeEmail {...props} />;
-}
-
-export default Object.assign(Email, { PreviewProps: ticketQrPreviewProps });

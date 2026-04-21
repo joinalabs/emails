@@ -1,6 +1,6 @@
-import { Section, Text } from "@react-email/components";
 import type { CSSProperties, FC, ReactNode } from "react";
 import { Fragment } from "react";
+import { Section, Text } from "react-email";
 import type { EmailTheme } from "../theme/types.js";
 import { defaultEmailThemeTokens } from "../theme/types.js";
 

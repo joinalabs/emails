@@ -1,14 +1,14 @@
 # @joinalabs/emails
 
-Joina email templates for event workflows (React Email + TypeScript). The main API imports the `render*Html` helpers and sends the returned HTML through your email provider.
+Joina email templates for event workflows (React Email + TypeScript). Import `render` and a namespace (`event` or `backoffice`) to get typed components and render them to HTML strings for any email provider.
 
-**Language policy:** repository documentation (this README, Cursor rules, developer-oriented comments) is **English**. **Default copy inside templates** (preheaders, headings, buttons, hints) is **Portuguese (Brazil)** for end users; the API should still pass locale-appropriate values for dynamic fields (`brandName`, `legalFooter`, formatted prices, etc.).
+**Language policy:** repository documentation (this README, developer-oriented comments) is **English**. **Default copy inside templates** (preheaders, headings, buttons, hints) is **Portuguese (Brazil)** for end users; the API should still pass locale-appropriate values for dynamic fields (`brandName`, `legalFooter`, formatted prices, etc.).
 
 ### Rendering vs sending
 
-- **React Email** (and this package) **only render** React to HTML (via `@react-email/render` / `render*Html`). They do **not** send mail.
-- **Send from your backend** (Joina API, worker, serverless function): call `render*Html`, then pass the string to your provider (Resend, SES, SendGrid, SMTP via Nodemailer, etc.). That keeps API keys off the client and matches how providers expect traffic (authenticated server, SPF/DKIM on your domain).
-- **Do not use the React Email preview CLI** (`email dev` / local preview app) as a mail-delivery path. It is **development-only** (hot reload, local static assets). It is not a production MTA or transactional email service.
+- **React Email** (and this package) **only render** React to HTML (via `@react-email/render`). They do **not** send mail.
+- **Send from your backend** (Joina API, worker, serverless function): call `render(...)`, then pass the string to your provider (Resend, SES, SendGrid, SMTP via Nodemailer, etc.). That keeps API keys off the client and matches how providers expect traffic (authenticated server, SPF/DKIM on your domain).
+- **Do not use the React Email preview CLI** (`email dev`) as a mail-delivery path. It is **development-only** (hot reload, local static assets). It is not a production MTA or transactional email service.
 
 ## Requirements
 
@@ -21,78 +21,121 @@ Joina email templates for event workflows (React Email + TypeScript). The main A
 
 The package is published to the **[GitHub Packages npm registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry)** (`https://npm.pkg.github.com`), not npmjs.com. [`publishConfig`](package.json) sets `registry` and **`access: "public"`** so new publishes are intended as **public** packages on GitHub.
 
-**Visibility in the browser (e.g. incognito):** GitHub controls each package’s visibility under your organisation’s **Packages** tab. If the **repository is private**, linked packages are often **private** by default—anonymous users then see nothing useful. To allow discovery without logging in, open the **`@joinalabs/emails`** package on GitHub → **Package settings** → **Change package visibility** → **Public** (requires org permissions). Existing versions published while the package was private stay until you change visibility or republish; `access: "public"` mainly helps **new** publishes declare intent.
-
-**Why [the org Packages page filtered by `repo_name=emails`](https://github.com/orgs/joinalabs/packages?repo_name=emails) can show “0 packages”:** that view is only a filtered list. You still get an empty table if no version was ever published successfully, if you are logged out and every package is **private**, or if GitHub’s filter does not match how the npm package is linked to the repo. Prefer **this repository → Packages** (sidebar) or the direct page `https://github.com/joinalabs/emails/pkgs/npm/emails` after a green publish job; the workflow also prints that URL in the job log under **Link to package on GitHub**.
-
-CI ([`.github/workflows/publish.yml`](.github/workflows/publish.yml)) runs on every **push to `main`** and publishes with **`GITHUB_TOKEN`** (`permissions: packages: write`). You do **not** need an npmjs account, **NPM_TOKEN**, or npm “trusted publisher” setup for this repo.
+CI ([`.github/workflows/publish.yml`](.github/workflows/publish.yml)) runs on every **push to `main`** and publishes with **`GITHUB_TOKEN`** (`permissions: packages: write`). You do **not** need an npmjs account, **NPM_TOKEN**, or npm "trusted publisher" setup for this repo.
 
 #### Every release
 
-1. Bump the **`version`** field in [`package.json`](package.json) whenever you intend to publish a new package (for example `npm version patch` / `minor` / `major`, or edit the field and commit). The registry rejects publishing the same version twice.
+1. Bump the **`version`** field in [`package.json`](package.json) (`npm version patch` / `minor` / `major`, or edit the field and commit). The registry rejects publishing the same version twice.
 2. Merge or **push to `main`**. The workflow runs `npm ci`, then `npm publish` (`prepublishOnly` runs build, Biome, and `tsc` first).
-
-If you push to `main` without bumping `version`, the job may **fail** at `npm publish` because the version already exists on GitHub Packages. Use tags or release branches locally if you prefer not to publish on every merge; the workflow only reflects the current `main` policy.
-
-**If `npm publish` fails in CI:** confirm the workflow has `packages: write`, the package name stays **`@joinalabs/emails`** (scope must match the GitHub owner/org), and [`repository`](package.json) points at this repository. See [GitHub Packages troubleshooting](https://docs.github.com/en/packages/learn-github-packages/about-permissions-for-github-packages).
-
-**License:** `package.json` currently sets `"license": "UNLICENSED"`. Publishing does not replace legal review—change `license` if your organisation standardises on another SPDX id.
 
 ### Installing in the Joina API
 
-The Joina API (and any other consumer) must tell npm to load **`@joinalabs`** packages from GitHub Packages, then authenticate with a token that can **read** packages for the `joinalabs` org.
-
-1. In the API repository, add an [`.npmrc`](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry#installing-a-package) (or merge into an existing one):
+1. In the API repository, add an `.npmrc`:
 
    ```ini
    @joinalabs:registry=https://npm.pkg.github.com
    ```
 
-2. For **`npm install`**, set a token with at least **`read:packages`** (classic PAT) or the equivalent **read** permission on a fine-grained PAT for the `joinalabs` organisation:
+2. Authenticate with a token that has at least **`read:packages`**:
 
    ```bash
-   # Local or CI: use env var (do not commit the token)
-   export NODE_AUTH_TOKEN=ghp_xxx   # or use ${{ secrets.GITHUB_TOKEN }} / PAT in GitHub Actions
+   export NODE_AUTH_TOKEN=ghp_xxx
    npm install @joinalabs/emails
    ```
 
-   In **GitHub Actions** for another repo under `joinalabs`, you can use a secret such as `NODE_AUTH_TOKEN` holding a PAT with `read:packages`, or a dedicated machine user token. The default **`GITHUB_TOKEN`** of a workflow only has access to the **current** repository’s packages unless you grant broader access via org settings or a PAT.
-
-3. Pin or range the version as usual (for example `"@joinalabs/emails": "^0.1.0"`). **Node 20+** and **`react` / `react-dom`** matching `peerDependencies` are still required.
+3. Pin or range the version as usual (e.g. `"@joinalabs/emails": "^0.2.0"`). **Node 20+** and **`react` / `react-dom`** matching `peerDependencies` are required.
 
 ### Usage (ESM)
 
-The package is **ESM-only** (`"type": "module"` and the `exports` map in `package.json`). Import render helpers from the package entry; each `render*Html` returns **`Promise<string>`** (HTML). **Email subjects** are not produced by this package—the API sets `Subject` (and any provider-specific metadata) when sending.
+The package is **ESM-only**. Import `render` and the namespace that matches the flow:
 
 ```typescript
-import {
-  renderTicketQrCodeHtml,
-  type TicketQrCodeEmailProps,
-  type EmailTheme,
-} from "@joinalabs/emails";
+import { render, event, backoffice } from "@joinalabs/emails";
+import type { EmailTheme } from "@joinalabs/emails";
 
 const theme: EmailTheme = {
   primaryColor: "#006FEE",
-  brandName: "Producer name",
+  brandName: "Produtora Example",
+  logoUrl: "https://cdn.example.com/logo.png",
 };
+```
 
-const html = await renderTicketQrCodeHtml({
-  theme,
-  ownerName: "Maria",
-  ownerEmail: "maria@example.com",
-  eventName: "Show name",
-  fareKind: "full",
-  qrImageSrc: "https://example.com/qr.png", // or cid: / data:image/png;base64,...
-} satisfies TicketQrCodeEmailProps);
+**Ticket with QR code:**
 
+```typescript
+import { render, event } from "@joinalabs/emails";
+import type { TicketQrCodeProps } from "@joinalabs/emails"; // via event.TicketQrCodeProps
+
+const html = await render(
+  <event.TicketQrCode
+    theme={theme}
+    ownerName="Maria Silva"
+    ownerEmail="maria@example.com"
+    eventName="Show ao vivo"
+    fareKind="full"
+    qrImageSrc="https://example.com/qr.png" // or cid: / data:image/png;base64,...
+    ctaUrl="https://example.com/ingresso/123"
+  />,
+);
 // Pass `html` to Resend, SES, SendGrid, Nodemailer, etc.
 ```
 
-See [Templates and render helpers](#templates-and-render-helpers) for all `render*Html` helpers and [Whitelabel theme](#whitelabel-theme-emailtheme) for `EmailTheme` fields.
+**Ticket portal (link only):**
 
-### Alternative: install from a release tarball
+```typescript
+const html = await render(
+  <event.TicketPortal
+    theme={theme}
+    ownerName="Maria Silva"
+    ownerEmail="maria@example.com"
+    eventName="Show ao vivo"
+    fareKind="full"
+    ticketUrl="https://example.com/ingresso/autenticado/123"
+  />,
+);
+```
 
-If a `.tgz` is attached to a [GitHub Release](https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository), consumers can run `npm install https://github.com/ORG/REPO/releases/download/vX.Y.Z/package.tgz` without configuring the GitHub Packages registry. Node 20+ and the React peers still apply.
+**Producer invite (team member):**
+
+```typescript
+const html = await render(
+  <backoffice.ProducerInvite
+    theme={theme}
+    inviteUrl="https://example.com/backoffice/convite?token=abc"
+    organizationOrProducerName="Produtora Example"
+    inviterName="João Admin"
+    inviteeEmail="novo.membro@example.com"
+  />,
+);
+```
+
+**Typing props explicitly:**
+
+```typescript
+import { render, event } from "@joinalabs/emails";
+
+// Props types live in the namespace
+const props: event.TicketQrCodeProps = {
+  theme,
+  ownerName: "Maria Silva",
+  ownerEmail: "maria@example.com",
+  eventName: "Show ao vivo",
+  fareKind: "full",
+  qrImageSrc: "https://example.com/qr.png",
+};
+
+const html = await render(<event.TicketQrCode {...props} />);
+```
+
+**Plain text rendering** (pass `options` to `render`):
+
+```typescript
+const text = await render(<event.EventMagicLink theme={theme} magicLinkUrl="..." eventOrBrandName="..." />, {
+  plainText: true,
+});
+```
+
+**Email subjects** are not produced by this package — the API sets `Subject` when sending.
 
 ## Scripts
 
@@ -102,53 +145,43 @@ If a `.tgz` is attached to a [GitHub Release](https://docs.github.com/en/reposit
 | `npm run check` | `biome check .` |
 | `npm run check:write` | Format and apply safe Biome fixes |
 | `npm run typecheck` | `tsc --noEmit` |
-| `npm run preview:html` | Builds the package and writes sample HTML for every template under `preview-output/` (gitignored) |
-| `npm run dev` | Starts the [React Email](https://react.email/) preview app (hot reload, sidebar) for files under [`emails/`](emails/) |
+| `npm run dev` | Starts the React Email preview app (hot reload, sidebar) for files under `src/namespaces/` |
 
 The Husky `pre-commit` hook runs `npm run check` and `npm run typecheck`.
 
 ## Testing emails
 
-### 1. Static HTML in the browser (fastest)
+### 1. Programmatic checks in your app or tests
 
-Run:
+Import the namespace components and `render` in integration tests: assert that the returned string includes expected copy, URLs, or order IDs.
 
-```bash
-npm run preview:html
+```typescript
+import { render, event } from "@joinalabs/emails";
+
+const html = await render(
+  <event.TicketQrCode theme={...} ownerName="Test" ownerEmail="t@t.com" eventName="Test Event" fareKind="full" qrImageSrc="data:image/png;base64,..." />,
+);
+
+expect(html).toContain("Test Event");
 ```
 
-This runs `npm run build`, then [`scripts/render-email-samples.mjs`](scripts/render-email-samples.mjs), which calls each `render*Html` with fixture props and writes one `.html` file per template into `preview-output/`. Open those files in Chrome, Firefox, or Safari to eyeball layout, typography, and links.
+### 2. React Email preview server (recommended for day-to-day dev)
 
-Local QR samples use a small **HTTPS PNG** (`emails/preview-qr-placeholder.ts`) so the image is visible when remote images load; in production pass your own `qrImageSrc` (`data:image/png;base64,...`, `cid:...`, or HTTPS) from your API.
+```bash
+npm run dev
+```
 
-### 2. Programmatic checks in your app or tests
+Opens [http://localhost:3000](http://localhost:3000) with a sidebar listing all templates under `src/namespaces/`. Each template folder has an `index.tsx` with a **default export** and `PreviewProps` for the sidebar. Shared preview-only constants live in [`src/namespaces/_preview-fixtures.ts`](src/namespaces/_preview-fixtures.ts) (underscore prefix so the React Email CLI ignores that file).
 
-Import the same `render*Html` helpers (or the `*Email` components plus `render` from `@react-email/render`) in integration tests: assert that the returned string includes expected copy, URLs, or order IDs. Keep fixtures minimal and stable.
+**This server does not send email.** For local SMTP capture use [Mailpit](https://mailpit.axllent.org/) or similar tools from the API side.
 
-### 3. React Email preview server (recommended for day-to-day dev)
+### 3. Real SMTP / inbox capture
 
-This repo follows the same idea as the official [Automatic setup](https://react.email/docs/getting-started/automatic-setup): a local **preview** app (not an SMTP relay). It is the supported way to iterate on layout with hot reload and a template list.
+Point a staging mailer ([Mailpit](https://mailpit.axllent.org/), [Ethereal](https://ethereal.email/), etc.) at your API and trigger flows that call `render(...)`. Validates headers, multipart HTML, and rendering inside real mailbox UIs.
 
-1. Install dependencies (includes `react-email` and `@react-email/preview-server` as dev tools — see also [monorepo / npm workspace notes](https://react.email/docs/getting-started/monorepo-setup/npm)).
-2. Run:
+### 4. Client regression (optional)
 
-   ```bash
-   npm run dev
-   ```
-
-3. Open [http://localhost:3000](http://localhost:3000) and pick a file under [`emails/`](emails/). Each file contains the **full template** (named export for the API package) plus a **default export** for the preview sidebar, with `PreviewProps` defined in the same module. Shared preview-only constants live in [`emails/_preview-fixtures.ts`](emails/_preview-fixtures.ts) (underscore prefix so the React Email CLI [ignores](https://react.email/docs/cli) that file in the sidebar).
-
-**Important:** this server **does not send** email to the internet. It only renders templates in the browser for development. To see messages inside Gmail/Outlook/Apple Mail inboxes, you still need your API (or a script) to call a real provider after `render*Html`. For local SMTP capture without leaving this repo, use tools such as [Mailpit](https://mailpit.axllent.org/) from the Joina API, not `email dev`.
-
-CLI details (`email dev`, `--dir`, `static/`, ignoring `_`-prefixed folders): [React Email CLI](https://react.email/docs/cli).
-
-### 4. Real SMTP / inbox capture
-
-Point a staging mailer or local tool ([Mailpit](https://mailpit.axllent.org/), [MailHog](https://github.com/mailhog/MailHog), [Ethereal](https://ethereal.email/), etc.) at your API and trigger flows that call `render*Html`. That validates headers, multipart HTML, and how the message looks inside a real mailbox UI.
-
-### 5. Client regression (optional, paid or self-hosted)
-
-For Outlook/Gmail-specific quirks, use a service such as [Litmus](https://www.litmus.com/) or [Email on Acid](https://www.emailonacid.com/) with HTML exported from `render*Html` or from step (1).
+For Outlook/Gmail-specific quirks, use [Litmus](https://www.litmus.com/) or [Email on Acid](https://www.emailonacid.com/) — render HTML via `render()` in a script and feed it to those tools.
 
 ## Whitelabel theme (`EmailTheme`)
 
@@ -168,127 +201,136 @@ Default layout tokens (neutral background, borders) are exported as `defaultEmai
 
 ## Internationalisation and copy
 
-End-user defaults in the JSX are **Portuguese (Brazil)**. To ship another language, pass the optional `copy` object per template (exported `*Copy` types) and/or localised subject lines from the API.
+End-user defaults are **Portuguese (Brazil)**. To ship another language, pass the optional `copy` object per template (exported `*Copy` types from the namespace, e.g. `event.TicketQrCodeCopy`) and/or localised subject lines from the API.
 
 ## QR codes and images
 
-This package **does not** generate QR codes. Your API (or another service) should:
+This package **does not** generate QR codes. Your API should:
 
-1. Build the QR payload (for example a signed URL or token).
-2. Render a PNG (or host the image) and pass it to `TicketQrCodeEmail` or `CourtesyTicketQrEmail` as `qrImageSrc`: HTTPS URL, `cid:...` for inline attachments, or `data:image/png;base64,...`.
+1. Build the QR payload (e.g. a signed URL or token).
+2. Render a PNG and pass it as `qrImageSrc`: HTTPS URL, `cid:...` for inline attachments, or `data:image/png;base64,...`.
 
-Set `copy.qrAlt` when you need a translated or more specific image `alt` text.
+Set `copy.qrAlt` for a translated or more specific `alt` text.
 
-## Templates and render helpers
+## Templates
 
-| Flow | React component | `render*Html` |
+Templates are organised into two namespaces. Import them from `event` or `backoffice`.
+
+### `event` namespace
+
+| Flow | Component | Props type |
 | --- | --- | --- |
-| Ticket purchase receipt | `TicketPurchaseReceiptEmail` | `renderTicketPurchaseReceiptHtml` |
-| Ticket — QR in email | `TicketQrCodeEmail` | `renderTicketQrCodeHtml` |
-| Ticket — link to authenticated screen only | `TicketPortalEmail` | `renderTicketPortalHtml` |
-| Ticket — transfer received (new holder, link only) | `TicketTransferReceivedEmail` | `renderTicketTransferReceivedHtml` |
-| Magic link (logged-in event area) | `EventMagicLinkEmail` | `renderEventMagicLinkHtml` |
-| Complimentary ticket — link only | `CourtesyTicketEmail` | `renderCourtesyTicketHtml` |
-| Complimentary ticket — QR in email | `CourtesyTicketQrEmail` | `renderCourtesyTicketQrHtml` |
-| Producer — primeiro acesso (pós-contrato) | `ProducerFirstAccountInviteEmail` | `renderProducerFirstAccountInviteHtml` |
-| Producer — convite de membro do time | `ProducerInviteEmail` | `renderProducerInviteHtml` |
-| Producer password reset | `ProducerPasswordResetEmail` | `renderProducerPasswordResetHtml` |
+| Ticket purchase receipt | `event.TicketPurchaseReceipt` | `event.TicketPurchaseReceiptProps` |
+| Ticket — QR in email | `event.TicketQrCode` | `event.TicketQrCodeProps` |
+| Ticket — link to authenticated screen | `event.TicketPortal` | `event.TicketPortalProps` |
+| Ticket — transfer received (new holder) | `event.TicketTransferReceived` | `event.TicketTransferReceivedProps` |
+| Magic link (event area login) | `event.EventMagicLink` | `event.EventMagicLinkProps` |
+| Complimentary ticket — link only | `event.CourtesyTicket` | `event.CourtesyTicketProps` |
+| Complimentary ticket — QR in email | `event.CourtesyTicketQrCode` | `event.CourtesyTicketQrCodeProps` |
 
-**Primeiro produtor (pós-contrato):** use `renderProducerFirstAccountInviteHtml` quando o link for gerado pelo backoffice após contrato comercial — destinatário ainda **sem** conta; o texto padrão fala em criar a primeira conta e cadastrar dados da empresa. **`inviteeEmail`** (opcional, recomendado) aparece no cartão. **`copy.footerNote`** aceita `{brandName}` para interpolar `theme.brandName`. Preheader: `{organizationOrProducerName} — {subjectPreview}`.
+### `backoffice` namespace
 
-**Convite de time:** use `renderProducerInviteHtml` quando **alguém que já tem conta** no backoffice convidar outro e-mail para a mesma produtora. Passe **`inviterName`** quando souber quem enviou (`copy.inviterLine` com `{name}`). **`onboardingHint`** descreve aceitar o convite e definir senha no fluxo de membro; ajuste via `copy` para outros idiomas. Preheader: `{organizationOrProducerName} — {subjectPreview}`.
+| Flow | Component | Props type |
+| --- | --- | --- |
+| Producer — first account setup (post-contract) | `backoffice.ProducerFirstAccountInvite` | `backoffice.ProducerFirstAccountInviteProps` |
+| Producer — team member invite | `backoffice.ProducerInvite` | `backoffice.ProducerInviteProps` |
+| Producer password reset | `backoffice.ProducerPasswordReset` | `backoffice.ProducerPasswordResetProps` |
 
-Each `render*Html(props)` returns `Promise<string>` (HTML) using `@react-email/render`.
-
-**Header (`HeaderLogo`):** With optional `headline` (tickets, courtesy, magic link, **ticket purchase receipt**), the **event name is left-aligned** on the first line. The **second line** is always `theme.brandName` (producer); if `theme.logoUrl` is set, a **small logo** (thumbnail) appears beside that name. Without `headline`, the block is left-aligned **producer branding only**: optional larger `logoUrl` above, then `brandName`. **Backoffice producer mail** (`ProducerInviteEmail`, `ProducerFirstAccountInviteEmail`, `ProducerPasswordResetEmail`) **does not render `HeaderLogo`** — the body starts with the title; `theme` still drives colours, links, and buttons. Local previews use a sample `logoUrl` in [`emails/_preview-fixtures.ts`](emails/_preview-fixtures.ts). Preheaders still prefix `{eventName} —` / `{eventOrBrandName} —` where the template passes a headline or receipt `eventName`.
-
-### Ticket email variants
-
-Ingresso-related flows ship as **two variants** each (plus transfer):
-
-- **QR no e-mail** — `TicketQrCodeEmail` / `CourtesyTicketQrEmail`: the API supplies `qrImageSrc`; optional `ctaUrl` opens the same ticket in the browser.
-- **Só portal** — `TicketPortalEmail` / `CourtesyTicketEmail`: no image in the message; the API supplies a single authenticated URL (`ticketUrl` or `ctaUrl`) so the user opens their ticket on your site.
-- **Transferência** — `TicketTransferReceivedEmail`: same detail card + **CTA only** (no QR) for the **new** holder after a transfer; pass `ticketUrl` and the new `ownerName` / `ownerEmail`. Optional **`transferrerName`** shows `copy.transferrerLine` with `{name}`.
-
-All ingresso templates above share the same **detail card** (via `buildTicketIngressoDetailRows` if you extend layouts yourself):
-
-| Data | Props / notes |
-| --- | --- |
-| Titular | First row: **`ownerName`** (bold) and **`ownerEmail`** (muted) inline. Event title stays in **`HeaderLogo`** only. |
-| Hora e local | Prefer **`eventDate`** + **`eventTime`** (renders `Data, Horário · nome do local`). Otherwise **`eventDateFormatted`** is the left segment before ` · `. Optional **`venue`** + **`venueMapsUrl`** (venue name is a **link** with `theme.primaryColor`). Row omitted if nothing to show. |
-| Lote | Optional **`lotName`** (shown before tipo). |
-| Tipo do ingresso | Only **`fareKind`**: `full` \| `half` \| `courtesy` → copy `fareFullLabel` / `fareHalfLabel` / `fareCourtesyLabel` (e.g. Inteira, Meia, Cortesia). Courtesy templates default **`fareKind`** to `courtesy` when omitted. |
-
-**Copy keys** include `titularLabel` and `horaLocalLabel` (defaults: Titular, Hora e local). **`issuedBy`** was removed from courtesy templates. Ticket ingresso emails do **not** show a public ticket code in the detail card.
-
-For the ticket purchase receipt, each `TicketPurchaseReceiptLineItem` includes `eventName` (for keys and multi-event data; not shown in the item row). Optional **`lotName`** sets the bold row title (e.g. `1º lote`); otherwise the title falls back to **`ticketTypeName`**. The subtitle shows **`fareCategoryLabel`** (e.g. `Inteira`, `Meia`) with `quantity×` unit price — **`ticketTypeName`** (e.g. access `Pista`) is not shown in the email. The line total is right-aligned on the same row as the lot title. Pass top-level **`eventName`** for the header and preheader; for carts with several events, supply a summary string from your domain logic. An optional **`id`** per line is recommended when lines could collide. The first detail card lists order id, purchase date, and optional **`paymentMethod`** (no primary CTA in this template). For card charges, pass **`paymentCardLast4`** (digits only, or a longer masked string from your vault — only the last four digits are shown, appended as `•••• 1234` in the theme’s muted text color after the method label). Optional **`payer`** adds a second card (heading from `copy.payerSectionHeading`) with **`name`**, optional **`email`**, and optional **`taxIdFormatted`**: digits in the string are shown as `•` for all but the **last two**, which use body text color (label from `copy.payerTaxIdLabel`). Prefer supplying a masked or truncated value from the API rather than the full raw id in the mail payload.
-
-### Example (API)
+### Full example — ticket purchase receipt
 
 ```typescript
-import {
-  renderTicketPurchaseReceiptHtml,
-  type TicketPurchaseReceiptEmailProps,
-} from "@joinalabs/emails";
+import { render, event } from "@joinalabs/emails";
+import type { EmailTheme } from "@joinalabs/emails";
 
-const props: TicketPurchaseReceiptEmailProps = {
-  theme: {
-    primaryColor: "#006FEE",
-    brandName: "Produtora",
-    logoUrl: "https://cdn.example.com/logo.png",
-  },
-  eventName: "Show ao vivo",
-  orderId: "ord_123",
-  purchasedAtFormatted: "13/04/2026 15:42",
-  items: [
-    {
-      id: "line-1",
-      eventName: "Show ao vivo",
-      lotName: "1º lote",
-      ticketTypeName: "Pista",
-      fareCategoryLabel: "Inteira",
-      quantity: 2,
-      unitPriceFormatted: "R$ 100,00",
-      lineTotalFormatted: "R$ 200,00",
-    },
-    {
-      id: "line-2",
-      eventName: "Show ao vivo",
-      lotName: "2º lote",
-      ticketTypeName: "Camarote",
-      fareCategoryLabel: "Meia",
-      quantity: 1,
-      unitPriceFormatted: "R$ 150,00",
-      lineTotalFormatted: "R$ 75,00",
-    },
-  ],
-  subtotalFormatted: "R$ 275,00",
-  totalFormatted: "R$ 275,00",
-  paymentMethod: "Cartão",
-  paymentCardLast4: "4242",
-  payer: {
-    name: "Maria Silva",
-    email: "maria@example.com",
-    taxIdFormatted: "***********09",
-  },
+const theme: EmailTheme = {
+  primaryColor: "#006FEE",
+  brandName: "Produtora Example",
+  logoUrl: "https://cdn.example.com/logo.png",
 };
 
-const html = await renderTicketPurchaseReceiptHtml(props);
+const html = await render(
+  <event.TicketPurchaseReceipt
+    theme={theme}
+    eventName="Show ao vivo"
+    orderId="ord_123"
+    purchasedAtFormatted="13/04/2026 15:42"
+    items={[
+      {
+        id: "line-1",
+        eventName: "Show ao vivo",
+        lotName: "1º lote",
+        ticketTypeName: "Pista",
+        fareCategoryLabel: "Inteira",
+        quantity: 2,
+        unitPriceFormatted: "R$ 100,00",
+        lineTotalFormatted: "R$ 200,00",
+      },
+      {
+        id: "line-2",
+        eventName: "Show ao vivo",
+        lotName: "2º lote",
+        ticketTypeName: "Camarote",
+        fareCategoryLabel: "Meia",
+        quantity: 1,
+        unitPriceFormatted: "R$ 150,00",
+        lineTotalFormatted: "R$ 75,00",
+      },
+    ]}
+    subtotalFormatted="R$ 275,00"
+    totalFormatted="R$ 275,00"
+    paymentMethod="Cartão"
+    paymentCardLast4="4242"
+    payer={{
+      name: "Maria Silva",
+      email: "maria@example.com",
+      taxIdFormatted: "***********09",
+    }}
+  />,
+);
 // send `html` through your mail provider
 ```
 
-Reusable blocks (`EmailLayout`, `HeaderLogo`, `EmailDetailList`, `PrimaryButton`, `FooterLegal`, **`buildTicketIngressoDetailRows`**, **`TicketFareKind`**) are also exported for internal extensions. `EmailDetailList` renders the compact title/value card used on tickets (including transfer received), courtesy, ticket purchase receipt order meta, and producer invite (with optional `footer` slot).
+### Detail card (ticket flows)
+
+All ticket templates share a detail card built by `buildTicketIngressoDetailRows`:
+
+| Row | Props |
+| --- | --- |
+| Titular | `ownerName` (bold) + `ownerEmail` (muted) inline |
+| Hora e local | `eventDate` + `eventTime` → `Data, Horário · local`. Or `eventDateFormatted` as the left segment. Optional `venue` + `venueMapsUrl` (venue name is a link). Omitted if nothing to show. |
+| Lote | Optional `lotName` |
+| Tipo do ingresso | `fareKind`: `full` \| `half` \| `courtesy` → copy labels |
+
+**Transfer received** (`event.TicketTransferReceived`): pass `ticketUrl` and the new `ownerName` / `ownerEmail`. Optional `transferrerName` shows `copy.transferrerLine` with `{name}`.
+
+**Header (`HeaderLogo`):** With `headline` (all ticket and event flows), the event name is left-aligned. `theme.brandName` is always on the second line with an optional small logo. Without `headline` (backoffice flows), only producer branding is shown. Backoffice templates (`ProducerInvite`, `ProducerFirstAccountInvite`, `ProducerPasswordReset`) **do not** render `HeaderLogo`.
+
+**Primeiro produtor:** use `backoffice.ProducerFirstAccountInvite` when the link is generated by the backoffice after a commercial contract — recipient has **no account yet**. `copy.footerNote` accepts `{brandName}` to interpolate `theme.brandName`.
+
+**Convite de time:** use `backoffice.ProducerInvite` when someone who **already has an account** invites another email. Pass `inviterName` when known (`copy.inviterLine` with `{name}`).
+
+## Reusable components
+
+These building-block components are also exported for internal extensions:
+
+| Export | Description |
+| --- | --- |
+| `EmailLayout` | Root wrapper with theme-aware styling and preview text |
+| `HeaderLogo` | Producer branding block with optional event headline |
+| `EmailDetailList` | Compact title/value card with optional `footer` slot |
+| `PrimaryButton` | Themed CTA button |
+| `FooterLegal` | Conditional legal footer (renders when `theme.legalFooter` is set) |
+| `buildTicketIngressoDetailRows` | Builds the ticket detail rows array for `EmailDetailList` |
 
 ## Suggested backlog (prioritise with product)
 
-Templates not implemented yet but useful for the same event SaaS:
+Templates not implemented yet:
 
 - Pending payment / checkout reminder
 - Refund or cancelled purchase
 - Event date or venue change
 - Pre-event reminder (24h / 1h)
-- Team member invite (backoffice RBAC)
 - Email change or 2FA confirmation (producer account)
 - Waitlist (slot available)
 
-When an item is prioritised, follow the same pattern: add a module under `emails/` (named export + default preview export), wire `render*Html` in `src/render/renderers.tsx`, and re-export from `src/index.ts`.
+When an item is prioritised, add a folder under `src/namespaces/event/` or `src/namespaces/backoffice/` following the existing pattern: `ComponentName.tsx` (pure component) + `index.tsx` (re-export + `PreviewProps` default export for the dev server). Re-export from the namespace `index.ts`.

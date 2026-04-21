@@ -1,5 +1,5 @@
-import { Link } from "@react-email/components";
 import type { ReactNode } from "react";
+import { Link } from "react-email";
 import type { EmailTheme } from "../theme/types.js";
 import { defaultEmailThemeTokens } from "../theme/types.js";
 import type { EmailDetailRow } from "./email-detail-list.js";
@@ -15,7 +15,7 @@ export interface TicketIngressoFareLabels {
 export interface TicketIngressoDetailLabels {
   titular: string;
   horaLocal: string;
-  /** Row title for fare kind only (e.g. “Tipo do ingresso” → Inteira / Meia / Cortesia). */
+  /** Row title for the fare kind (e.g. “Ticket type” → Full / Half / Complimentary). */
   ticketTypeFare: string;
   lot: string;
 }
@@ -25,12 +25,12 @@ export interface BuildTicketIngressoDetailRowsInput {
   labels: TicketIngressoDetailLabels;
   fareLabels: TicketIngressoFareLabels;
   /**
-   * Calendar date for the “Hora e local” line (e.g. `20/04/2026`). Use with `eventTime`, or pass
+   * Calendar date for the date/venue line (e.g. `20/04/2026`). Use with `eventTime`, or pass
    * `eventDateFormatted` instead.
    */
   eventDate?: string;
   /**
-   * Clock time for the “Hora e local” line (e.g. `21:00`). Use with `eventDate`, or pass
+   * Clock time for the date/venue line (e.g. `21:00`). Use with `eventDate`, or pass
    * `eventDateFormatted` instead.
    */
   eventTime?: string;

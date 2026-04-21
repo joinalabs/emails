@@ -1,15 +1,14 @@
-import { Column, Hr, Row, Section, Text } from "@react-email/components";
 import type { FC, ReactNode } from "react";
+import { Column, Hr, Row, Section, Text } from "react-email";
 import {
   EmailDetailList,
   type EmailDetailRow,
   EmailLayout,
   FooterLegal,
   HeaderLogo,
-} from "../src/components/index.js";
-import type { EmailTheme } from "../src/theme/types.js";
-import { defaultEmailThemeTokens } from "../src/theme/types.js";
-import { previewTheme } from "./_preview-fixtures.js";
+} from "../../../components/index.js";
+import type { EmailTheme } from "../../../theme/types.js";
+import { defaultEmailThemeTokens } from "../../../theme/types.js";
 
 /** Last four digits only for display (never pass a full PAN in email props). */
 function cardLast4Digits(raw: string | undefined): string | null {
@@ -35,7 +34,7 @@ function payerTaxIdDisplayValue(raw: string, theme: EmailTheme): string | ReactN
   }
   return (
     <>
-      <span style={{ color: mutedColor }}>{`${bullets}\u00A0`}</span>
+      <span style={{ color: mutedColor }}>{`${bullets} `}</span>
       <span style={{ color: textColor }}>{last2}</span>
     </>
   );
@@ -53,7 +52,7 @@ function paymentMethodDetailValue(
   return (
     <>
       <span style={{ color: textColor }}>{method}</span>
-      <span style={{ color: mutedColor }}>{`\u00A0•••• ${last4}`}</span>
+      <span style={{ color: mutedColor }}>{` •••• ${last4}`}</span>
     </>
   );
 }
@@ -104,7 +103,7 @@ export interface TicketPurchaseReceiptCopy {
   payerTaxIdLabel?: string;
 }
 
-export interface TicketPurchaseReceiptEmailProps {
+export interface TicketPurchaseReceiptProps {
   theme: EmailTheme;
   /**
    * Event name shown in the header (same pattern as ticket emails). For orders spanning multiple
@@ -146,7 +145,7 @@ const defaultCopy: Required<TicketPurchaseReceiptCopy> = {
   payerTaxIdLabel: "Documento",
 };
 
-export const TicketPurchaseReceiptEmail: FC<TicketPurchaseReceiptEmailProps> = ({
+export const TicketPurchaseReceipt: FC<TicketPurchaseReceiptProps> = ({
   theme,
   eventName,
   orderId,
@@ -299,47 +298,3 @@ export const TicketPurchaseReceiptEmail: FC<TicketPurchaseReceiptEmailProps> = (
     </EmailLayout>
   );
 };
-
-const ticketPurchaseReceiptPreviewProps = {
-  theme: previewTheme,
-  eventName: "Show ao vivo",
-  orderId: "ord_preview_001",
-  purchasedAtFormatted: "13/04/2026 15:42",
-  items: [
-    {
-      id: "line-1",
-      eventName: "Show ao vivo",
-      lotName: "1º lote",
-      ticketTypeName: "Pista",
-      fareCategoryLabel: "Inteira",
-      quantity: 2,
-      unitPriceFormatted: "R$ 100,00",
-      lineTotalFormatted: "R$ 200,00",
-    },
-    {
-      id: "line-2",
-      eventName: "Show ao vivo",
-      lotName: "2º lote",
-      ticketTypeName: "Camarote",
-      fareCategoryLabel: "Meia",
-      quantity: 1,
-      unitPriceFormatted: "R$ 150,00",
-      lineTotalFormatted: "R$ 75,00",
-    },
-  ],
-  subtotalFormatted: "R$ 275,00",
-  totalFormatted: "R$ 275,00",
-  paymentMethod: "Cartão",
-  paymentCardLast4: "4242",
-  payer: {
-    name: "Maria Silva",
-    email: "maria@example.com",
-    taxIdFormatted: "12345678909",
-  },
-} satisfies TicketPurchaseReceiptEmailProps;
-
-function Email(props: TicketPurchaseReceiptEmailProps) {
-  return <TicketPurchaseReceiptEmail {...props} />;
-}
-
-export default Object.assign(Email, { PreviewProps: ticketPurchaseReceiptPreviewProps });

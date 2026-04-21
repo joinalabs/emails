@@ -1,6 +1,7 @@
-/** Ingresso — e-mail para o novo titular após transferência: só link (CTA), sem QR no e-mail. */
-import { Link, Text } from "@react-email/components";
+/** Ticket — email to the new holder after a transfer: link (CTA) only, no QR in the email. */
+
 import type { FC } from "react";
+import { Link, Text } from "react-email";
 import {
   buildTicketIngressoDetailRows,
   EmailDetailList,
@@ -9,12 +10,9 @@ import {
   HeaderLogo,
   PrimaryButton,
   type TicketFareKind,
-} from "../src/components/index.js";
-import type { EmailTheme } from "../src/theme/types.js";
-import { defaultEmailThemeTokens } from "../src/theme/types.js";
-import { previewTheme } from "./_preview-fixtures.js";
-
-export type { TicketFareKind };
+} from "../../../components/index.js";
+import type { EmailTheme } from "../../../theme/types.js";
+import { defaultEmailThemeTokens } from "../../../theme/types.js";
 
 export interface TicketTransferReceivedCopy {
   subjectPreview?: string;
@@ -34,7 +32,7 @@ export interface TicketTransferReceivedCopy {
   securityNote?: string;
 }
 
-export interface TicketTransferReceivedEmailProps {
+export interface TicketTransferReceivedProps {
   theme: EmailTheme;
   /** New holder (recipient of the transfer), shown in the detail card. */
   ownerName: string;
@@ -47,7 +45,7 @@ export interface TicketTransferReceivedEmailProps {
   venueMapsUrl?: string;
   fareKind: TicketFareKind;
   lotName?: string;
-  /** Authenticated URL to open the ticket (same pattern as `TicketPortalEmail` `ticketUrl`). */
+  /** Authenticated URL to open the ticket (same pattern as `TicketPortal` `ticketUrl`). */
   ticketUrl: string;
   /** Previous holder name, if the API can share it (optional). */
   transferrerName?: string;
@@ -73,7 +71,7 @@ const defaultCopy: Required<TicketTransferReceivedCopy> = {
     "Se você não esperava este ingresso ou não reconhece o evento, pode ignorar este e-mail.",
 };
 
-export const TicketTransferReceivedEmail: FC<TicketTransferReceivedEmailProps> = ({
+export const TicketTransferReceived: FC<TicketTransferReceivedProps> = ({
   theme,
   ownerName,
   ownerEmail,
@@ -156,24 +154,3 @@ export const TicketTransferReceivedEmail: FC<TicketTransferReceivedEmailProps> =
     </EmailLayout>
   );
 };
-
-const ticketTransferReceivedPreviewProps = {
-  theme: previewTheme,
-  ownerName: "Carlos Novo",
-  ownerEmail: "carlos.novo@example.com",
-  eventName: "Show ao vivo",
-  eventDate: "20/04/2026",
-  eventTime: "21:00",
-  venue: "Arena Example, São Paulo",
-  venueMapsUrl: "https://www.google.com/maps/search/?api=1&query=Arena+Example+São+Paulo",
-  fareKind: "full" as const,
-  lotName: "1º lote",
-  ticketUrl: "https://example.com/ingresso/transferido/TCK-preview-002",
-  transferrerName: "Maria Silva",
-} satisfies TicketTransferReceivedEmailProps;
-
-function Email(props: TicketTransferReceivedEmailProps) {
-  return <TicketTransferReceivedEmail {...props} />;
-}
-
-export default Object.assign(Email, { PreviewProps: ticketTransferReceivedPreviewProps });

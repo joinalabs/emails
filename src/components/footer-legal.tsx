@@ -1,5 +1,5 @@
-import { Hr, Section, Text } from "@react-email/components";
 import type { FC } from "react";
+import { Hr, Section, Text } from "react-email";
 import type { EmailTheme } from "../theme/types.js";
 import { defaultEmailThemeTokens } from "../theme/types.js";
 

@@ -1,6 +1,7 @@
-/** Cortesia — variante com QR Code embutido no e-mail (opcionalmente com link para a tela). */
-import { Column, Img, Row, Section, Text } from "@react-email/components";
+/** Complimentary ticket — variant with QR code embedded in the email (optionally with a link to the ticket screen). */
+
 import type { FC } from "react";
+import { Column, Img, Row, Section, Text } from "react-email";
 import {
   buildTicketIngressoDetailRows,
   EmailDetailList,
@@ -9,14 +10,11 @@ import {
   HeaderLogo,
   PrimaryButton,
   type TicketFareKind,
-} from "../src/components/index.js";
-import type { EmailTheme } from "../src/theme/types.js";
-import { defaultEmailThemeTokens } from "../src/theme/types.js";
-import { placeholderQrSrc, previewTheme } from "./_preview-fixtures.js";
+} from "../../../components/index.js";
+import type { EmailTheme } from "../../../theme/types.js";
+import { defaultEmailThemeTokens } from "../../../theme/types.js";
 
-export type { TicketFareKind };
-
-export interface CourtesyTicketQrCopy {
+export interface CourtesyTicketQrCodeCopy {
   subjectPreview?: string;
   title?: string;
   intro?: string;
@@ -32,7 +30,7 @@ export interface CourtesyTicketQrCopy {
   footnote?: string;
 }
 
-export interface CourtesyTicketQrEmailProps {
+export interface CourtesyTicketQrCodeProps {
   theme: EmailTheme;
   eventName: string;
   eventDate?: string;
@@ -50,10 +48,10 @@ export interface CourtesyTicketQrEmailProps {
   qrImageSrc: string;
   /** Optional link to the full ticket / wallet page (same rules as `qrImageSrc` for URLs). */
   ctaUrl?: string;
-  copy?: CourtesyTicketQrCopy;
+  copy?: CourtesyTicketQrCodeCopy;
 }
 
-const defaultCopy: Required<CourtesyTicketQrCopy> = {
+const defaultCopy: Required<CourtesyTicketQrCodeCopy> = {
   subjectPreview: "Ingresso cortesia",
   title: "Você recebeu um ingresso cortesia",
   intro:
@@ -70,7 +68,7 @@ const defaultCopy: Required<CourtesyTicketQrCopy> = {
   footnote: "Em caso de dúvidas, fale com o organizador do evento.",
 };
 
-export const CourtesyTicketQrEmail: FC<CourtesyTicketQrEmailProps> = ({
+export const CourtesyTicketQrCode: FC<CourtesyTicketQrCodeProps> = ({
   theme,
   eventName,
   eventDate,
@@ -169,25 +167,3 @@ export const CourtesyTicketQrEmail: FC<CourtesyTicketQrEmailProps> = ({
     </EmailLayout>
   );
 };
-
-const courtesyTicketQrPreviewProps = {
-  theme: previewTheme,
-  eventName: "Show ao vivo",
-  eventDate: "20/04/2026",
-  eventTime: "21:00",
-  venue: "Arena Example, São Paulo",
-  venueMapsUrl: "https://www.google.com/maps/search/?api=1&query=Arena+Example+São+Paulo",
-  lotName: "Cortesias",
-  ownerName: "João Convidado",
-  ownerEmail: "convidado@example.com",
-  qrImageSrc: placeholderQrSrc,
-  ctaUrl: "https://example.com/ingresso/cortesia-preview",
-} satisfies CourtesyTicketQrEmailProps;
-
-function Email(props: CourtesyTicketQrEmailProps) {
-  return <CourtesyTicketQrEmail {...props} />;
-}
-
-export default Object.assign(Email, {
-  PreviewProps: courtesyTicketQrPreviewProps,
-});

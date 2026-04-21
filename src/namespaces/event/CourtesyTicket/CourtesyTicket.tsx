@@ -1,6 +1,7 @@
-/** Cortesia — variante só com link autenticado para a tela do ingresso (sem QR no e-mail). */
-import { Text } from "@react-email/components";
+/** Complimentary ticket — variant with an authenticated link to the ticket screen only (no QR in the email). */
+
 import type { FC } from "react";
+import { Text } from "react-email";
 import {
   buildTicketIngressoDetailRows,
   EmailDetailList,
@@ -9,12 +10,9 @@ import {
   HeaderLogo,
   PrimaryButton,
   type TicketFareKind,
-} from "../src/components/index.js";
-import type { EmailTheme } from "../src/theme/types.js";
-import { defaultEmailThemeTokens } from "../src/theme/types.js";
-import { previewTheme } from "./_preview-fixtures.js";
-
-export type { TicketFareKind };
+} from "../../../components/index.js";
+import type { EmailTheme } from "../../../theme/types.js";
+import { defaultEmailThemeTokens } from "../../../theme/types.js";
 
 export interface CourtesyTicketCopy {
   subjectPreview?: string;
@@ -31,7 +29,7 @@ export interface CourtesyTicketCopy {
   footnote?: string;
 }
 
-export interface CourtesyTicketEmailProps {
+export interface CourtesyTicketProps {
   theme: EmailTheme;
   eventName: string;
   eventDate?: string;
@@ -63,7 +61,7 @@ const defaultCopy: Required<CourtesyTicketCopy> = {
   footnote: "Em caso de dúvidas, fale com o organizador do evento.",
 };
 
-export const CourtesyTicketEmail: FC<CourtesyTicketEmailProps> = ({
+export const CourtesyTicket: FC<CourtesyTicketProps> = ({
   theme,
   eventName,
   eventDate,
@@ -122,22 +120,3 @@ export const CourtesyTicketEmail: FC<CourtesyTicketEmailProps> = ({
     </EmailLayout>
   );
 };
-
-const courtesyTicketPreviewProps = {
-  theme: previewTheme,
-  eventName: "Show ao vivo",
-  eventDate: "20/04/2026",
-  eventTime: "21:00",
-  venue: "Arena Example, São Paulo",
-  venueMapsUrl: "https://www.google.com/maps/search/?api=1&query=Arena+Example+São+Paulo",
-  lotName: "Cortesias",
-  ownerName: "João Convidado",
-  ownerEmail: "convidado@example.com",
-  ctaUrl: "https://example.com/ingresso/cortesia-preview",
-} satisfies CourtesyTicketEmailProps;
-
-function Email(props: CourtesyTicketEmailProps) {
-  return <CourtesyTicketEmail {...props} />;
-}
-
-export default Object.assign(Email, { PreviewProps: courtesyTicketPreviewProps });

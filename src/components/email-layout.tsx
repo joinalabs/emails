@@ -1,5 +1,5 @@
-import { Body, Container, Head, Html, Preview } from "@react-email/components";
 import type { FC, ReactNode } from "react";
+import { Body, Container, Head, Html, Preview } from "react-email";
 import type { EmailTheme } from "../theme/types.js";
 import { defaultEmailThemeTokens } from "../theme/types.js";
 

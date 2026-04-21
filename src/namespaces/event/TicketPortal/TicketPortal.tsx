@@ -1,6 +1,7 @@
-/** Ingresso — variante só com link autenticado para a tela do ingresso (sem QR no e-mail). */
-import { Text } from "@react-email/components";
+/** Ticket — variant with an authenticated link to the ticket screen only (no QR in the email). */
+
 import type { FC } from "react";
+import { Text } from "react-email";
 import {
   buildTicketIngressoDetailRows,
   EmailDetailList,
@@ -9,12 +10,9 @@ import {
   HeaderLogo,
   PrimaryButton,
   type TicketFareKind,
-} from "../src/components/index.js";
-import type { EmailTheme } from "../src/theme/types.js";
-import { defaultEmailThemeTokens } from "../src/theme/types.js";
-import { previewTheme } from "./_preview-fixtures.js";
-
-export type { TicketFareKind };
+} from "../../../components/index.js";
+import type { EmailTheme } from "../../../theme/types.js";
+import { defaultEmailThemeTokens } from "../../../theme/types.js";
 
 export interface TicketPortalCopy {
   subjectPreview?: string;
@@ -31,12 +29,12 @@ export interface TicketPortalCopy {
   securityNote?: string;
 }
 
-export interface TicketPortalEmailProps {
+export interface TicketPortalProps {
   theme: EmailTheme;
   ownerName: string;
   ownerEmail: string;
   eventName: string;
-  /** Use with `eventTime` for `Data, Horário · local`. */
+  /** Use with `eventTime` to build the `Date, Time · Venue` line. */
   eventDate?: string;
   eventTime?: string;
   /** Fallback left segment when `eventDate` + `eventTime` are not both set (e.g. `20/04/2026, 21:00`). */
@@ -64,7 +62,7 @@ const defaultCopy: Required<TicketPortalCopy> = {
   securityNote: "Se você não reconhece esta compra, pode ignorar este e-mail.",
 };
 
-export const TicketPortalEmail: FC<TicketPortalEmailProps> = ({
+export const TicketPortal: FC<TicketPortalProps> = ({
   theme,
   ownerName,
   ownerEmail,
@@ -123,23 +121,3 @@ export const TicketPortalEmail: FC<TicketPortalEmailProps> = ({
     </EmailLayout>
   );
 };
-
-const ticketPortalPreviewProps = {
-  theme: previewTheme,
-  ownerName: "Maria Silva",
-  ownerEmail: "maria@example.com",
-  eventName: "Show ao vivo",
-  eventDate: "20/04/2026",
-  eventTime: "21:00",
-  venue: "Arena Example, São Paulo",
-  venueMapsUrl: "https://www.google.com/maps/search/?api=1&query=Arena+Example+São+Paulo",
-  fareKind: "full" as const,
-  lotName: "1º lote",
-  ticketUrl: "https://example.com/ingresso/autenticado/TCK-preview-001",
-} satisfies TicketPortalEmailProps;
-
-function Email(props: TicketPortalEmailProps) {
-  return <TicketPortalEmail {...props} />;
-}
-
-export default Object.assign(Email, { PreviewProps: ticketPortalPreviewProps });

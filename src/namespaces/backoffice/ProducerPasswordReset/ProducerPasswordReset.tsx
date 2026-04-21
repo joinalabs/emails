@@ -1,9 +1,8 @@
-import { Link, Text } from "@react-email/components";
 import type { FC } from "react";
-import { EmailLayout, FooterLegal, PrimaryButton } from "../src/components/index.js";
-import type { EmailTheme } from "../src/theme/types.js";
-import { defaultEmailThemeTokens } from "../src/theme/types.js";
-import { previewTheme } from "./_preview-fixtures.js";
+import { Link, Text } from "react-email";
+import { EmailLayout, FooterLegal, PrimaryButton } from "../../../components/index.js";
+import type { EmailTheme } from "../../../theme/types.js";
+import { defaultEmailThemeTokens } from "../../../theme/types.js";
 
 export interface ProducerPasswordResetCopy {
   subjectPreview?: string;
@@ -14,7 +13,7 @@ export interface ProducerPasswordResetCopy {
   securityNote?: string;
 }
 
-export interface ProducerPasswordResetEmailProps {
+export interface ProducerPasswordResetProps {
   theme: EmailTheme;
   resetUrl: string;
   copy?: ProducerPasswordResetCopy;
@@ -31,7 +30,7 @@ const defaultCopy: Required<ProducerPasswordResetCopy> = {
     "🔒 Se você não solicitou a redefinição, ignore este e-mail — sua senha permanece a mesma.",
 };
 
-export const ProducerPasswordResetEmail: FC<ProducerPasswordResetEmailProps> = ({
+export const ProducerPasswordReset: FC<ProducerPasswordResetProps> = ({
   theme,
   resetUrl,
   copy,
@@ -67,14 +66,3 @@ export const ProducerPasswordResetEmail: FC<ProducerPasswordResetEmailProps> = (
     </EmailLayout>
   );
 };
-
-const producerPasswordResetPreviewProps = {
-  theme: previewTheme,
-  resetUrl: "https://example.com/backoffice/redefinir?token=preview",
-} satisfies ProducerPasswordResetEmailProps;
-
-function Email(props: ProducerPasswordResetEmailProps) {
-  return <ProducerPasswordResetEmail {...props} />;
-}
-
-export default Object.assign(Email, { PreviewProps: producerPasswordResetPreviewProps });

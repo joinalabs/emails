@@ -1,73 +1,73 @@
-/**
- * Primeiro acesso do produtor na Joina: convite para criar a primeira conta e cadastrar
- * dados da empresa (produtora) e do usuário na plataforma.
- */
-import { Link, Text } from "@react-email/components";
 import type { FC } from "react";
+import { Link, Text } from "react-email";
 import {
   EmailDetailList,
   type EmailDetailRow,
   EmailLayout,
   FooterLegal,
   PrimaryButton,
-} from "../src/components/index.js";
-import type { EmailTheme } from "../src/theme/types.js";
-import { defaultEmailThemeTokens } from "../src/theme/types.js";
-import { previewTheme } from "./_preview-fixtures.js";
+} from "../../../components/index.js";
+import type { EmailTheme } from "../../../theme/types.js";
+import { defaultEmailThemeTokens } from "../../../theme/types.js";
 
-export interface ProducerFirstAccountInviteCopy {
+export interface ProducerInviteCopy {
   subjectPreview?: string;
   title?: string;
   intro?: string;
-  /** Paragraph after the detail card, before the CTA (first account + company data). */
+  /** Shown after the detail card and before the CTA — accepting the team invite and setting password. */
   onboardingHint?: string;
   organizationLabel?: string;
   inviteeEmailLabel?: string;
-  /** Shown in the card footer; use `{brandName}` for `theme.brandName` (platform). */
-  footerNote?: string;
+  inviterLine?: string;
   ctaLabel?: string;
   fallbackPrompt?: string;
   securityNote?: string;
 }
 
-export interface ProducerFirstAccountInviteEmailProps {
+export interface ProducerInviteProps {
   theme: EmailTheme;
-  /** Signed or time-limited URL for first signup (password + producer/company profile). */
+  /** Signed or time-limited URL to accept the team invite (typically set password on first join). */
   inviteUrl: string;
-  /** Producer / organization name (shown in the card and preheader). */
+  /** Producer or organization name shown in the card (and in the preheader). */
   organizationOrProducerName: string;
-  /** E-mail this invite was sent to (recommended). */
+  /** E-mail address the invite was sent to (optional but recommended for clarity). */
   inviteeEmail?: string;
-  copy?: ProducerFirstAccountInviteCopy;
+  /** Name of the teammate who sent the invite. */
+  inviterName?: string;
+  copy?: ProducerInviteCopy;
 }
 
-const defaultCopy: Required<ProducerFirstAccountInviteCopy> = {
-  subjectPreview: "✨ Seu convite na Joina",
-  title: "🎉 Vamos configurar sua produtora na Joina?",
+const defaultCopy: Required<ProducerInviteCopy> = {
+  subjectPreview: "✨ Convite — time na Joina",
+  title: "🎉 Você foi convidado para o time na Joina!",
   intro:
-    "Boas notícias: você recebeu um convite para abrir a primeira conta da produtora na plataforma Joina. Ficamos muito felizes em ter vocês por aqui — quando quiser começar, é só usar o botão abaixo.",
+    "O time da produtora abaixo te chamou para colaborar na plataforma Joina — boa notícia! O link é pessoal e seguro; é só usar o botão quando quiser aceitar.",
   onboardingHint:
-    "Na primeira vez você escolhe uma senha e preenche os dados da empresa e da sua conta. Em poucos minutos você já deixa tudo pronto para brilhar com os eventos na Joina — muito bom ter vocês com a gente!",
+    "Ao aceitar, você escolhe sua senha e já entra na Joina com a permissão que o time liberou para você. Em poucos passos você já está dentro.",
   organizationLabel: "Produtora / organização",
   inviteeEmailLabel: "Convite enviado para",
-  footerNote: "Com carinho, equipe Joina ✨",
-  ctaLabel: "Quero começar!",
+  inviterLine: "Convite enviado por {name} ✨",
+  ctaLabel: "Quero entrar!",
   fallbackPrompt: "Se o botão não funcionar, copie e cole este endereço no navegador:",
   securityNote:
-    "Se você não reconhece este convite ou não esperava um acesso à Joina, sem problema — pode ignorar este e-mail.",
+    "Se esse convite pegou você de surpresa ou não era para você, sem problema — pode ignorar este e-mail.",
 };
 
-export const ProducerFirstAccountInviteEmail: FC<ProducerFirstAccountInviteEmailProps> = ({
+export const ProducerInvite: FC<ProducerInviteProps> = ({
   theme,
   inviteUrl,
   organizationOrProducerName,
   inviteeEmail,
+  inviterName,
   copy,
 }) => {
   const c = { ...defaultCopy, ...copy };
   const muted = theme.mutedTextColor ?? defaultEmailThemeTokens.mutedTextColor;
+  const inviterText = inviterName
+    ? c.inviterLine.replace("{name}", inviterName)
+    : "O convite veio de alguém do time com acesso à plataforma Joina.";
+
   const previewText = `${organizationOrProducerName} — ${c.subjectPreview}`;
-  const footerText = c.footerNote.replace("{brandName}", theme.brandName);
 
   const rows: EmailDetailRow[] = [
     { id: "org", title: c.organizationLabel, value: organizationOrProducerName },
@@ -89,7 +89,7 @@ export const ProducerFirstAccountInviteEmail: FC<ProducerFirstAccountInviteEmail
         sectionStyle={{ marginBottom: "16px" }}
         footer={
           <Text style={{ margin: 0, fontSize: "13px", lineHeight: "20px", color: muted }}>
-            {footerText}
+            {inviterText}
           </Text>
         }
       />
@@ -118,16 +118,3 @@ export const ProducerFirstAccountInviteEmail: FC<ProducerFirstAccountInviteEmail
     </EmailLayout>
   );
 };
-
-const producerFirstAccountInvitePreviewProps = {
-  theme: previewTheme,
-  inviteUrl: "https://example.com/backoffice/primeiro-acesso?token=preview",
-  organizationOrProducerName: "Produtora Example",
-  inviteeEmail: "contato@produtora.example",
-} satisfies ProducerFirstAccountInviteEmailProps;
-
-function Email(props: ProducerFirstAccountInviteEmailProps) {
-  return <ProducerFirstAccountInviteEmail {...props} />;
-}
-
-export default Object.assign(Email, { PreviewProps: producerFirstAccountInvitePreviewProps });

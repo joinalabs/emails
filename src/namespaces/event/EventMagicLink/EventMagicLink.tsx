@@ -1,9 +1,8 @@
-import { Link, Text } from "@react-email/components";
 import type { FC } from "react";
-import { EmailLayout, FooterLegal, HeaderLogo, PrimaryButton } from "../src/components/index.js";
-import type { EmailTheme } from "../src/theme/types.js";
-import { defaultEmailThemeTokens } from "../src/theme/types.js";
-import { previewTheme } from "./_preview-fixtures.js";
+import { Link, Text } from "react-email";
+import { EmailLayout, FooterLegal, HeaderLogo, PrimaryButton } from "../../../components/index.js";
+import type { EmailTheme } from "../../../theme/types.js";
+import { defaultEmailThemeTokens } from "../../../theme/types.js";
 
 export interface EventMagicLinkCopy {
   subjectPreview?: string;
@@ -14,7 +13,7 @@ export interface EventMagicLinkCopy {
   securityNote?: string;
 }
 
-export interface EventMagicLinkEmailProps {
+export interface EventMagicLinkProps {
   theme: EmailTheme;
   magicLinkUrl: string;
   eventOrBrandName: string;
@@ -31,7 +30,7 @@ const defaultCopy: Required<EventMagicLinkCopy> = {
   securityNote: "🔒 Se você não solicitou este acesso, ignore este e-mail.",
 };
 
-export const EventMagicLinkEmail: FC<EventMagicLinkEmailProps> = ({
+export const EventMagicLink: FC<EventMagicLinkProps> = ({
   theme,
   magicLinkUrl,
   eventOrBrandName,
@@ -85,15 +84,3 @@ export const EventMagicLinkEmail: FC<EventMagicLinkEmailProps> = ({
     </EmailLayout>
   );
 };
-
-const eventMagicLinkPreviewProps = {
-  theme: previewTheme,
-  magicLinkUrl: "https://example.com/auth/magic?token=preview_token",
-  eventOrBrandName: "Show ao vivo",
-} satisfies EventMagicLinkEmailProps;
-
-function Email(props: EventMagicLinkEmailProps) {
-  return <EventMagicLinkEmail {...props} />;
-}
-
-export default Object.assign(Email, { PreviewProps: eventMagicLinkPreviewProps });

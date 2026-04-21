@@ -1,5 +1,5 @@
-import { Button, Section } from "@react-email/components";
 import type { FC } from "react";
+import { Button, Section } from "react-email";
 import type { EmailTheme } from "../theme/types.js";
 
 export interface PrimaryButtonProps {
