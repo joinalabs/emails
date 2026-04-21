@@ -4,7 +4,7 @@ import { EmailLayout, FooterLegal, HeaderLogo, PrimaryButton } from "../../../co
 import type { EmailTheme } from "../../../theme/types.js";
 import { defaultEmailThemeTokens } from "../../../theme/types.js";
 
-export interface EventMagicLinkCopy {
+export interface CustomerAuthMagicLinkCopy {
   subjectPreview?: string;
   title?: string;
   intro?: string;
@@ -13,14 +13,14 @@ export interface EventMagicLinkCopy {
   securityNote?: string;
 }
 
-export interface EventMagicLinkProps {
+export interface CustomerAuthMagicLinkProps {
   theme: EmailTheme;
   magicLinkUrl: string;
   eventOrBrandName: string;
-  copy?: EventMagicLinkCopy;
+  copy?: CustomerAuthMagicLinkCopy;
 }
 
-const defaultCopy: Required<EventMagicLinkCopy> = {
+const defaultCopy: Required<CustomerAuthMagicLinkCopy> = {
   subjectPreview: "✨ Seu link de acesso",
   title: "🔓 Acesse sua área do evento",
   intro:
@@ -30,7 +30,7 @@ const defaultCopy: Required<EventMagicLinkCopy> = {
   securityNote: "🔒 Se você não solicitou este acesso, ignore este e-mail.",
 };
 
-export const EventMagicLink: FC<EventMagicLinkProps> = ({
+export const CustomerAuthMagicLink: FC<CustomerAuthMagicLinkProps> = ({
   theme,
   magicLinkUrl,
   eventOrBrandName,

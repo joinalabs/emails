@@ -14,7 +14,7 @@ import {
 import type { EmailTheme } from "../../../theme/types.js";
 import { defaultEmailThemeTokens } from "../../../theme/types.js";
 
-export interface TicketTransferReceivedCopy {
+export interface TransferredTicketReceivedCopy {
   subjectPreview?: string;
   title?: string;
   intro?: string;
@@ -32,7 +32,7 @@ export interface TicketTransferReceivedCopy {
   securityNote?: string;
 }
 
-export interface TicketTransferReceivedProps {
+export interface TransferredTicketReceivedProps {
   theme: EmailTheme;
   /** New holder (recipient of the transfer), shown in the detail card. */
   ownerName: string;
@@ -45,14 +45,14 @@ export interface TicketTransferReceivedProps {
   venueMapsUrl?: string;
   fareKind: TicketFareKind;
   lotName?: string;
-  /** Authenticated URL to open the ticket (same pattern as `TicketPortal` `ticketUrl`). */
+  /** Authenticated URL to open the ticket (same pattern as `Ticket` `ticketUrl`). */
   ticketUrl: string;
   /** Previous holder name, if the API can share it (optional). */
   transferrerName?: string;
-  copy?: TicketTransferReceivedCopy;
+  copy?: TransferredTicketReceivedCopy;
 }
 
-const defaultCopy: Required<TicketTransferReceivedCopy> = {
+const defaultCopy: Required<TransferredTicketReceivedCopy> = {
   subjectPreview: "Ingresso transferido para você",
   title: "Você recebeu um ingresso por transferência",
   intro:
@@ -71,7 +71,7 @@ const defaultCopy: Required<TicketTransferReceivedCopy> = {
     "Se você não esperava este ingresso ou não reconhece o evento, pode ignorar este e-mail.",
 };
 
-export const TicketTransferReceived: FC<TicketTransferReceivedProps> = ({
+export const TransferredTicketReceived: FC<TransferredTicketReceivedProps> = ({
   theme,
   ownerName,
   ownerEmail,

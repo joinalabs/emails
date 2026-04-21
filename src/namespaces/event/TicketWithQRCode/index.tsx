@@ -1,9 +1,9 @@
-export type { TicketQrCodeCopy, TicketQrCodeProps } from "./TicketQrCode.js";
-export { TicketQrCode } from "./TicketQrCode.js";
+export type { TicketWithQRCodeCopy, TicketWithQRCodeProps } from "./TicketWithQRCode.js";
+export { TicketWithQRCode } from "./TicketWithQRCode.js";
 
 import { placeholderQrSrc, previewTheme } from "../../_preview-fixtures.js";
-import type { TicketQrCodeProps } from "./TicketQrCode.js";
-import { TicketQrCode } from "./TicketQrCode.js";
+import type { TicketWithQRCodeProps } from "./TicketWithQRCode.js";
+import { TicketWithQRCode } from "./TicketWithQRCode.js";
 
 const previewProps = {
   theme: previewTheme,
@@ -18,10 +18,10 @@ const previewProps = {
   lotName: "1º lote",
   qrImageSrc: placeholderQrSrc,
   ctaUrl: "https://example.com/ingresso/TCK-preview-001",
-} satisfies TicketQrCodeProps;
+} satisfies TicketWithQRCodeProps;
 
-function Email(props: TicketQrCodeProps) {
-  return <TicketQrCode {...props} />;
+function Email(props: TicketWithQRCodeProps) {
+  return <TicketWithQRCode {...props} />;
 }
 
 export default Object.assign(Email, { PreviewProps: previewProps });

@@ -14,7 +14,7 @@ import {
 import type { EmailTheme } from "../../../theme/types.js";
 import { defaultEmailThemeTokens } from "../../../theme/types.js";
 
-export interface TicketPortalCopy {
+export interface TicketCopy {
   subjectPreview?: string;
   title?: string;
   intro?: string;
@@ -29,7 +29,7 @@ export interface TicketPortalCopy {
   securityNote?: string;
 }
 
-export interface TicketPortalProps {
+export interface TicketProps {
   theme: EmailTheme;
   ownerName: string;
   ownerEmail: string;
@@ -44,10 +44,10 @@ export interface TicketPortalProps {
   fareKind: TicketFareKind;
   lotName?: string;
   ticketUrl: string;
-  copy?: TicketPortalCopy;
+  copy?: TicketCopy;
 }
 
-const defaultCopy: Required<TicketPortalCopy> = {
+const defaultCopy: Required<TicketCopy> = {
   subjectPreview: "Seu ingresso",
   title: "Seu ingresso",
   intro: "Use o botão abaixo para abrir seu ingresso na tela.",
@@ -62,7 +62,7 @@ const defaultCopy: Required<TicketPortalCopy> = {
   securityNote: "Se você não reconhece esta compra, pode ignorar este e-mail.",
 };
 
-export const TicketPortal: FC<TicketPortalProps> = ({
+export const Ticket: FC<TicketProps> = ({
   theme,
   ownerName,
   ownerEmail,

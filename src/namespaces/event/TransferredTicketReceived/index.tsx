@@ -1,12 +1,12 @@
 export type {
-  TicketTransferReceivedCopy,
-  TicketTransferReceivedProps,
-} from "./TicketTransferReceived.js";
-export { TicketTransferReceived } from "./TicketTransferReceived.js";
+  TransferredTicketReceivedCopy,
+  TransferredTicketReceivedProps,
+} from "./TransferredTicketReceived.js";
+export { TransferredTicketReceived } from "./TransferredTicketReceived.js";
 
 import { previewTheme } from "../../_preview-fixtures.js";
-import type { TicketTransferReceivedProps } from "./TicketTransferReceived.js";
-import { TicketTransferReceived } from "./TicketTransferReceived.js";
+import type { TransferredTicketReceivedProps } from "./TransferredTicketReceived.js";
+import { TransferredTicketReceived } from "./TransferredTicketReceived.js";
 
 const previewProps = {
   theme: previewTheme,
@@ -21,10 +21,10 @@ const previewProps = {
   lotName: "1º lote",
   ticketUrl: "https://example.com/ingresso/transferido/TCK-preview-002",
   transferrerName: "Maria Silva",
-} satisfies TicketTransferReceivedProps;
+} satisfies TransferredTicketReceivedProps;
 
-function Email(props: TicketTransferReceivedProps) {
-  return <TicketTransferReceived {...props} />;
+function Email(props: TransferredTicketReceivedProps) {
+  return <TransferredTicketReceived {...props} />;
 }
 
 export default Object.assign(Email, { PreviewProps: previewProps });

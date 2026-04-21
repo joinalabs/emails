@@ -1,12 +1,12 @@
 export type {
-  CourtesyTicketQrCodeCopy,
-  CourtesyTicketQrCodeProps,
-} from "./CourtesyTicketQrCode.js";
-export { CourtesyTicketQrCode } from "./CourtesyTicketQrCode.js";
+  CourtesyTicketWithQRCodeCopy,
+  CourtesyTicketWithQRCodeProps,
+} from "./CourtesyTicketWithQRCode.js";
+export { CourtesyTicketWithQRCode } from "./CourtesyTicketWithQRCode.js";
 
 import { placeholderQrSrc, previewTheme } from "../../_preview-fixtures.js";
-import type { CourtesyTicketQrCodeProps } from "./CourtesyTicketQrCode.js";
-import { CourtesyTicketQrCode } from "./CourtesyTicketQrCode.js";
+import type { CourtesyTicketWithQRCodeProps } from "./CourtesyTicketWithQRCode.js";
+import { CourtesyTicketWithQRCode } from "./CourtesyTicketWithQRCode.js";
 
 const previewProps = {
   theme: previewTheme,
@@ -20,10 +20,10 @@ const previewProps = {
   ownerEmail: "convidado@example.com",
   qrImageSrc: placeholderQrSrc,
   ctaUrl: "https://example.com/ingresso/cortesia-preview",
-} satisfies CourtesyTicketQrCodeProps;
+} satisfies CourtesyTicketWithQRCodeProps;
 
-function Email(props: CourtesyTicketQrCodeProps) {
-  return <CourtesyTicketQrCode {...props} />;
+function Email(props: CourtesyTicketWithQRCodeProps) {
+  return <CourtesyTicketWithQRCode {...props} />;
 }
 
 export default Object.assign(Email, { PreviewProps: previewProps });

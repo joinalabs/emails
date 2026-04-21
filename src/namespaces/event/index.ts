@@ -1,14 +1,17 @@
 export type { CourtesyTicketCopy, CourtesyTicketProps } from "./CourtesyTicket/index.js";
 export { CourtesyTicket } from "./CourtesyTicket/index.js";
 export type {
-  CourtesyTicketQrCodeCopy,
-  CourtesyTicketQrCodeProps,
-} from "./CourtesyTicketQrCode/index.js";
-export { CourtesyTicketQrCode } from "./CourtesyTicketQrCode/index.js";
-export type { EventMagicLinkCopy, EventMagicLinkProps } from "./EventMagicLink/index.js";
-export { EventMagicLink } from "./EventMagicLink/index.js";
-export type { TicketPortalCopy, TicketPortalProps } from "./TicketPortal/index.js";
-export { TicketPortal } from "./TicketPortal/index.js";
+  CourtesyTicketWithQRCodeCopy,
+  CourtesyTicketWithQRCodeProps,
+} from "./CourtesyTicketWithQRCode/index.js";
+export { CourtesyTicketWithQRCode } from "./CourtesyTicketWithQRCode/index.js";
+export type {
+  CustomerAuthMagicLinkCopy,
+  CustomerAuthMagicLinkProps,
+} from "./CustomerAuthMagicLink/index.js";
+export { CustomerAuthMagicLink } from "./CustomerAuthMagicLink/index.js";
+export type { TicketCopy, TicketProps } from "./Ticket/index.js";
+export { Ticket } from "./Ticket/index.js";
 export type {
   TicketPurchaseReceiptCopy,
   TicketPurchaseReceiptLineItem,
@@ -16,10 +19,10 @@ export type {
   TicketPurchaseReceiptProps,
 } from "./TicketPurchaseReceipt/index.js";
 export { TicketPurchaseReceipt } from "./TicketPurchaseReceipt/index.js";
-export type { TicketQrCodeCopy, TicketQrCodeProps } from "./TicketQrCode/index.js";
-export { TicketQrCode } from "./TicketQrCode/index.js";
+export type { TicketWithQRCodeCopy, TicketWithQRCodeProps } from "./TicketWithQRCode/index.js";
+export { TicketWithQRCode } from "./TicketWithQRCode/index.js";
 export type {
-  TicketTransferReceivedCopy,
-  TicketTransferReceivedProps,
-} from "./TicketTransferReceived/index.js";
-export { TicketTransferReceived } from "./TicketTransferReceived/index.js";
+  TransferredTicketReceivedCopy,
+  TransferredTicketReceivedProps,
+} from "./TransferredTicketReceived/index.js";
+export { TransferredTicketReceived } from "./TransferredTicketReceived/index.js";

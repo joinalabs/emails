@@ -1,9 +1,9 @@
-export type { TicketPortalCopy, TicketPortalProps } from "./TicketPortal.js";
-export { TicketPortal } from "./TicketPortal.js";
+export type { TicketCopy, TicketProps } from "./Ticket.js";
+export { Ticket } from "./Ticket.js";
 
 import { previewTheme } from "../../_preview-fixtures.js";
-import type { TicketPortalProps } from "./TicketPortal.js";
-import { TicketPortal } from "./TicketPortal.js";
+import type { TicketProps } from "./Ticket.js";
+import { Ticket } from "./Ticket.js";
 
 const previewProps = {
   theme: previewTheme,
@@ -17,10 +17,10 @@ const previewProps = {
   fareKind: "full" as const,
   lotName: "1º lote",
   ticketUrl: "https://example.com/ingresso/autenticado/TCK-preview-001",
-} satisfies TicketPortalProps;
+} satisfies TicketProps;
 
-function Email(props: TicketPortalProps) {
-  return <TicketPortal {...props} />;
+function Email(props: TicketProps) {
+  return <Ticket {...props} />;
 }
 
 export default Object.assign(Email, { PreviewProps: previewProps });

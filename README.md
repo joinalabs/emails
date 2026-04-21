@@ -64,10 +64,10 @@ const theme: EmailTheme = {
 
 ```typescript
 import { render, event } from "@joinalabs/emails";
-import type { TicketQrCodeProps } from "@joinalabs/emails"; // via event.TicketQrCodeProps
+import type { TicketWithQRCodeProps } from "@joinalabs/emails"; // via event.TicketWithQRCodeProps
 
 const html = await render(
-  <event.TicketQrCode
+  <event.TicketWithQRCode
     theme={theme}
     ownerName="Maria Silva"
     ownerEmail="maria@example.com"
@@ -80,11 +80,11 @@ const html = await render(
 // Pass `html` to Resend, SES, SendGrid, Nodemailer, etc.
 ```
 
-**Ticket portal (link only):**
+**Ticket (link only):**
 
 ```typescript
 const html = await render(
-  <event.TicketPortal
+  <event.Ticket
     theme={theme}
     ownerName="Maria Silva"
     ownerEmail="maria@example.com"
@@ -99,7 +99,7 @@ const html = await render(
 
 ```typescript
 const html = await render(
-  <backoffice.ProducerInvite
+  <backoffice.AccountMemberInvite
     theme={theme}
     inviteUrl="https://example.com/backoffice/convite?token=abc"
     organizationOrProducerName="Produtora Example"
@@ -115,7 +115,7 @@ const html = await render(
 import { render, event } from "@joinalabs/emails";
 
 // Props types live in the namespace
-const props: event.TicketQrCodeProps = {
+const props: event.TicketWithQRCodeProps = {
   theme,
   ownerName: "Maria Silva",
   ownerEmail: "maria@example.com",
@@ -124,13 +124,13 @@ const props: event.TicketQrCodeProps = {
   qrImageSrc: "https://example.com/qr.png",
 };
 
-const html = await render(<event.TicketQrCode {...props} />);
+const html = await render(<event.TicketWithQRCode {...props} />);
 ```
 
 **Plain text rendering** (pass `options` to `render`):
 
 ```typescript
-const text = await render(<event.EventMagicLink theme={theme} magicLinkUrl="..." eventOrBrandName="..." />, {
+const text = await render(<event.CustomerAuthMagicLink theme={theme} magicLinkUrl="..." eventOrBrandName="..." />, {
   plainText: true,
 });
 ```
@@ -201,7 +201,7 @@ Default layout tokens (neutral background, borders) are exported as `defaultEmai
 
 ## Internationalisation and copy
 
-End-user defaults are **Portuguese (Brazil)**. To ship another language, pass the optional `copy` object per template (exported `*Copy` types from the namespace, e.g. `event.TicketQrCodeCopy`) and/or localised subject lines from the API.
+End-user defaults are **Portuguese (Brazil)**. To ship another language, pass the optional `copy` object per template (exported `*Copy` types from the namespace, e.g. `event.TicketWithQRCodeCopy`) and/or localised subject lines from the API.
 
 ## QR codes and images
 
@@ -221,20 +221,20 @@ Templates are organised into two namespaces. Import them from `event` or `backof
 | Flow | Component | Props type |
 | --- | --- | --- |
 | Ticket purchase receipt | `event.TicketPurchaseReceipt` | `event.TicketPurchaseReceiptProps` |
-| Ticket — QR in email | `event.TicketQrCode` | `event.TicketQrCodeProps` |
-| Ticket — link to authenticated screen | `event.TicketPortal` | `event.TicketPortalProps` |
-| Ticket — transfer received (new holder) | `event.TicketTransferReceived` | `event.TicketTransferReceivedProps` |
-| Magic link (event area login) | `event.EventMagicLink` | `event.EventMagicLinkProps` |
+| Ticket — QR in email | `event.TicketWithQRCode` | `event.TicketWithQRCodeProps` |
+| Ticket — link to authenticated screen | `event.Ticket` | `event.TicketProps` |
+| Ticket — transfer received (new holder) | `event.TransferredTicketReceived` | `event.TransferredTicketReceivedProps` |
+| Magic link (event area login) | `event.CustomerAuthMagicLink` | `event.CustomerAuthMagicLinkProps` |
 | Complimentary ticket — link only | `event.CourtesyTicket` | `event.CourtesyTicketProps` |
-| Complimentary ticket — QR in email | `event.CourtesyTicketQrCode` | `event.CourtesyTicketQrCodeProps` |
+| Complimentary ticket — QR in email | `event.CourtesyTicketWithQRCode` | `event.CourtesyTicketWithQRCodeProps` |
 
 ### `backoffice` namespace
 
 | Flow | Component | Props type |
 | --- | --- | --- |
-| Producer — first account setup (post-contract) | `backoffice.ProducerFirstAccountInvite` | `backoffice.ProducerFirstAccountInviteProps` |
-| Producer — team member invite | `backoffice.ProducerInvite` | `backoffice.ProducerInviteProps` |
-| Producer password reset | `backoffice.ProducerPasswordReset` | `backoffice.ProducerPasswordResetProps` |
+| First account setup (post-contract) | `backoffice.AccountInvite` | `backoffice.AccountInviteProps` |
+| Team member invite | `backoffice.AccountMemberInvite` | `backoffice.AccountMemberInviteProps` |
+| Password reset | `backoffice.AccountMemberPasswordReset` | `backoffice.AccountMemberPasswordResetProps` |
 
 ### Full example — ticket purchase receipt
 
@@ -301,13 +301,13 @@ All ticket templates share a detail card built by `buildTicketIngressoDetailRows
 | Lote | Optional `lotName` |
 | Tipo do ingresso | `fareKind`: `full` \| `half` \| `courtesy` → copy labels |
 
-**Transfer received** (`event.TicketTransferReceived`): pass `ticketUrl` and the new `ownerName` / `ownerEmail`. Optional `transferrerName` shows `copy.transferrerLine` with `{name}`.
+**Transfer received** (`event.TransferredTicketReceived`): pass `ticketUrl` and the new `ownerName` / `ownerEmail`. Optional `transferrerName` shows `copy.transferrerLine` with `{name}`.
 
-**Header (`HeaderLogo`):** With `headline` (all ticket and event flows), the event name is left-aligned. `theme.brandName` is always on the second line with an optional small logo. Without `headline` (backoffice flows), only producer branding is shown. Backoffice templates (`ProducerInvite`, `ProducerFirstAccountInvite`, `ProducerPasswordReset`) **do not** render `HeaderLogo`.
+**Header (`HeaderLogo`):** With `headline` (all ticket and event flows), the event name is left-aligned. `theme.brandName` is always on the second line with an optional small logo. Without `headline` (backoffice flows), only producer branding is shown. Backoffice templates (`AccountInvite`, `AccountMemberInvite`, `AccountMemberPasswordReset`) **do not** render `HeaderLogo`.
 
-**Primeiro produtor:** use `backoffice.ProducerFirstAccountInvite` when the link is generated by the backoffice after a commercial contract — recipient has **no account yet**. `copy.footerNote` accepts `{brandName}` to interpolate `theme.brandName`.
+**First account:** use `backoffice.AccountInvite` when the link is generated by the backoffice after a commercial contract — recipient has **no account yet**. `copy.footerNote` accepts `{brandName}` to interpolate `theme.brandName`.
 
-**Convite de time:** use `backoffice.ProducerInvite` when someone who **already has an account** invites another email. Pass `inviterName` when known (`copy.inviterLine` with `{name}`).
+**Team member invite:** use `backoffice.AccountMemberInvite` when someone who **already has an account** invites another email. Pass `inviterName` when known (`copy.inviterLine` with `{name}`).
 
 ## Reusable components
 

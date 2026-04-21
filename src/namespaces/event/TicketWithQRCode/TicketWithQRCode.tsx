@@ -1,4 +1,4 @@
-/** Complimentary ticket — variant with QR code embedded in the email (optionally with a link to the ticket screen). */
+/** Ticket — variant with QR code embedded in the email (optionally with an additional link). */
 
 import type { FC } from "react";
 import { Column, Img, Row, Section, Text } from "react-email";
@@ -14,7 +14,7 @@ import {
 import type { EmailTheme } from "../../../theme/types.js";
 import { defaultEmailThemeTokens } from "../../../theme/types.js";
 
-export interface CourtesyTicketQrCodeCopy {
+export interface TicketWithQRCodeCopy {
   subjectPreview?: string;
   title?: string;
   intro?: string;
@@ -27,35 +27,35 @@ export interface CourtesyTicketQrCodeCopy {
   fareHalfLabel?: string;
   qrAlt?: string;
   ctaLabel?: string;
-  footnote?: string;
+  securityNote?: string;
 }
 
-export interface CourtesyTicketQrCodeProps {
+export interface TicketWithQRCodeProps {
   theme: EmailTheme;
+  ownerName: string;
+  ownerEmail: string;
   eventName: string;
   eventDate?: string;
   eventTime?: string;
   eventDateFormatted?: string;
   venue?: string;
   venueMapsUrl?: string;
-  fareKind?: TicketFareKind;
+  fareKind: TicketFareKind;
   lotName?: string;
-  ownerName: string;
-  ownerEmail: string;
   /**
    * QR image source produced outside this package: HTTPS URL, `cid:...`, or a `data:image/png;base64,...` URL.
    */
   qrImageSrc: string;
-  /** Optional link to the full ticket / wallet page (same rules as `qrImageSrc` for URLs). */
+  /** Optional deep link to wallet / ticket page (same rules as `qrImageSrc` for URLs). */
   ctaUrl?: string;
-  copy?: CourtesyTicketQrCodeCopy;
+  copy?: TicketWithQRCodeCopy;
 }
 
-const defaultCopy: Required<CourtesyTicketQrCodeCopy> = {
-  subjectPreview: "Ingresso cortesia",
-  title: "Você recebeu um ingresso cortesia",
+const defaultCopy: Required<TicketWithQRCodeCopy> = {
+  subjectPreview: "Seu ingresso com QR Code",
+  title: "Seu ingresso",
   intro:
-    "Um ingresso foi emitido em seu nome. O QR Code está abaixo para uso na entrada. Você também pode abrir o link para ver o ingresso na tela.",
+    "Mostre o QR Code na entrada para validar o acesso. O link abaixo abre a página do seu ingresso com as informações completas do evento.",
   titularLabel: "Titular",
   horaLocalLabel: "Hora e local",
   ticketTypeFareLabel: "Tipo do ingresso",
@@ -63,23 +63,23 @@ const defaultCopy: Required<CourtesyTicketQrCodeCopy> = {
   fareCourtesyLabel: "Cortesia",
   fareFullLabel: "Inteira",
   fareHalfLabel: "Meia",
-  qrAlt: "QR Code do ingresso cortesia",
+  qrAlt: "QR Code do ingresso",
   ctaLabel: "Acessar ingresso",
-  footnote: "Em caso de dúvidas, fale com o organizador do evento.",
+  securityNote: "Se você não reconhece esta compra, pode ignorar este e-mail.",
 };
 
-export const CourtesyTicketQrCode: FC<CourtesyTicketQrCodeProps> = ({
+export const TicketWithQRCode: FC<TicketWithQRCodeProps> = ({
   theme,
+  ownerName,
+  ownerEmail,
   eventName,
   eventDate,
   eventTime,
   eventDateFormatted,
   venue,
   venueMapsUrl,
-  fareKind = "courtesy",
+  fareKind,
   lotName,
-  ownerName,
-  ownerEmail,
   qrImageSrc,
   ctaUrl,
   copy,
@@ -115,26 +115,15 @@ export const CourtesyTicketQrCode: FC<CourtesyTicketQrCodeProps> = ({
   return (
     <EmailLayout previewText={previewText} theme={theme}>
       <HeaderLogo theme={theme} headline={eventName} />
-      <Text style={{ margin: "0 0 10px", fontSize: "20px", fontWeight: 600 }}>{c.title}</Text>
-      <Text
-        style={{
-          margin: "0 0 20px",
-          fontSize: "14px",
-          lineHeight: "22px",
-          color: muted,
-        }}
-      >
+      <Text style={{ margin: "0 0 16px", fontSize: "20px", fontWeight: 600 }}>{c.title}</Text>
+      <Text style={{ margin: "0 0 20px", fontSize: "14px", lineHeight: "22px", color: muted }}>
         {c.intro}
       </Text>
       <Section style={{ margin: "8px 0 24px" }}>
         <Row>
           <Column
             align="center"
-            style={{
-              width: "100%",
-              padding: "32px 32px",
-              boxSizing: "border-box",
-            }}
+            style={{ width: "100%", padding: "28px 32px", boxSizing: "border-box" }}
           >
             <Img
               alt={c.qrAlt}
@@ -153,15 +142,8 @@ export const CourtesyTicketQrCode: FC<CourtesyTicketQrCodeProps> = ({
       </Section>
       <EmailDetailList theme={theme} rows={detailRows} />
       {ctaUrl ? <PrimaryButton href={ctaUrl} label={c.ctaLabel} theme={theme} /> : null}
-      <Text
-        style={{
-          margin: "16px 0 0",
-          fontSize: "12px",
-          lineHeight: "18px",
-          color: muted,
-        }}
-      >
-        {c.footnote}
+      <Text style={{ margin: "20px 0 0", fontSize: "12px", lineHeight: "18px", color: muted }}>
+        {c.securityNote}
       </Text>
       <FooterLegal theme={theme} />
     </EmailLayout>

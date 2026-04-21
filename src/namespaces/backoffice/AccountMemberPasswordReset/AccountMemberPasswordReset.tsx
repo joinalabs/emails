@@ -4,7 +4,7 @@ import { EmailLayout, FooterLegal, PrimaryButton } from "../../../components/ind
 import type { EmailTheme } from "../../../theme/types.js";
 import { defaultEmailThemeTokens } from "../../../theme/types.js";
 
-export interface ProducerPasswordResetCopy {
+export interface AccountMemberPasswordResetCopy {
   subjectPreview?: string;
   title?: string;
   intro?: string;
@@ -13,13 +13,13 @@ export interface ProducerPasswordResetCopy {
   securityNote?: string;
 }
 
-export interface ProducerPasswordResetProps {
+export interface AccountMemberPasswordResetProps {
   theme: EmailTheme;
   resetUrl: string;
-  copy?: ProducerPasswordResetCopy;
+  copy?: AccountMemberPasswordResetCopy;
 }
 
-const defaultCopy: Required<ProducerPasswordResetCopy> = {
+const defaultCopy: Required<AccountMemberPasswordResetCopy> = {
   subjectPreview: "🔐 Redefinição de senha",
   title: "🔑 Redefinir sua senha",
   intro:
@@ -30,7 +30,7 @@ const defaultCopy: Required<ProducerPasswordResetCopy> = {
     "🔒 Se você não solicitou a redefinição, ignore este e-mail — sua senha permanece a mesma.",
 };
 
-export const ProducerPasswordReset: FC<ProducerPasswordResetProps> = ({
+export const AccountMemberPasswordReset: FC<AccountMemberPasswordResetProps> = ({
   theme,
   resetUrl,
   copy,
