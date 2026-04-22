@@ -200,7 +200,7 @@ export const TicketPurchaseReceipt: FC<TicketPurchaseReceiptProps> = ({
 
   return (
     <EmailLayout previewText={previewText} theme={theme}>
-      <HeaderLogo brand={brand} headline={eventName} />
+      <HeaderLogo brand={brand} theme={theme} headline={eventName} />
       <Text style={{ margin: "0 0 10px", fontSize: "20px", fontWeight: 600 }}>{c.title}</Text>
       <Text style={{ margin: "0 0 20px", fontSize: "14px", lineHeight: "22px", color: muted }}>
         {c.intro}

@@ -39,6 +39,9 @@ const themeMap: Record<ThemeName, ThemeSpec> = {
     // Light/dark mode appearance is handled by a CSS class injected via EmailLayout.
     solidColor: "#ffffff",
     onGradientText: "#18181b",
+    // Used as the border on the initial box (and as the Outlook button border fallback;
+    // the joina-btn-white CSS class overrides to transparent in modern clients).
+    borderColor: "#e4e4e7",
   },
   Peach: { from: "#F89C3D", to: "#E44C35", solidColor: "#E44C35", onGradientText: "#ffffff" },
   Snow: { from: "#31AAC7", to: "#0E68E3", solidColor: "#0E68E3", onGradientText: "#ffffff" },

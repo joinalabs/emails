@@ -1,29 +1,72 @@
-import type { FC } from "react";
+import type { CSSProperties, FC } from "react";
 import { Column, Img, Row, Section, Text } from "react-email";
+import { resolveTheme, type ThemeName } from "../theme/gradient-themes.js";
 import type { Brand } from "../theme/types.js";
 import { defaultEmailThemeTokens } from "../theme/types.js";
 
 export interface HeaderLogoProps {
   brand: Brand;
+  theme: ThemeName;
   /**
    * Primary line: **event** (or campaign) name for attendee-facing mail, left-aligned.
-   * When omitted, the block shows producer `logoUrl` (if any) + `brand.brandName` only.
+   * When omitted, the block shows producer logo/initial + `brand.brandName` only.
    */
   headline?: string;
 }
 
-/** Producer logo rounding: same for thumb (event mail) and header logo (admin / receipt). */
 const producerLogoBorderRadius = "3px";
-
-/** Producer "icon" beside name when `headline` is set (attendee mail). */
 const producerThumbSize = 16;
 const producerNameGap = 3;
 
-export const HeaderLogo: FC<HeaderLogoProps> = ({ brand, headline }) => {
+function BrandInitial({
+  letter,
+  size,
+  solidColor,
+  backgroundImage,
+  onGradientText,
+  borderColor,
+  extraStyle,
+}: {
+  letter: string;
+  size: number;
+  solidColor: string;
+  backgroundImage: string;
+  onGradientText: string;
+  borderColor: string;
+  extraStyle?: CSSProperties;
+}) {
+  return (
+    <div
+      style={{
+        width: `${size}px`,
+        height: `${size}px`,
+        backgroundColor: solidColor,
+        backgroundImage,
+        color: onGradientText,
+        border: `1px solid ${borderColor}`,
+        borderRadius: producerLogoBorderRadius,
+        display: "inline-block",
+        textAlign: "center",
+        lineHeight: `${size - 2}px`,
+        fontSize: `${Math.round(size * 0.56)}px`,
+        fontWeight: 700,
+        boxSizing: "border-box",
+        ...extraStyle,
+      }}
+    >
+      {letter}
+    </div>
+  );
+}
+
+export const HeaderLogo: FC<HeaderLogoProps> = ({ brand, theme, headline }) => {
   const text = defaultEmailThemeTokens.textColor;
   const muted = defaultEmailThemeTokens.mutedTextColor;
+  const { solidColor, backgroundImage, onGradientText, borderColor } = resolveTheme(theme);
+
   const trimmed = headline?.trim();
   const hasHeadline = Boolean(trimmed && trimmed.length > 0);
+  const initial = (brand.brandName.trim()[0] ?? "?").toUpperCase();
 
   const producerSublineStyle = {
     margin: 0,
@@ -47,15 +90,15 @@ export const HeaderLogo: FC<HeaderLogoProps> = ({ brand, headline }) => {
           >
             {trimmed}
           </Text>
-          {brand.logoUrl ? (
-            <Row>
-              <Column
-                style={{
-                  width: `${producerThumbSize + producerNameGap}px`,
-                  verticalAlign: "middle" as const,
-                  paddingRight: `${producerNameGap}px`,
-                }}
-              >
+          <Row>
+            <Column
+              style={{
+                width: `${producerThumbSize + producerNameGap}px`,
+                verticalAlign: "middle" as const,
+                paddingRight: `${producerNameGap}px`,
+              }}
+            >
+              {brand.logoUrl ? (
                 <Img
                   alt={brand.brandName}
                   height={producerThumbSize}
@@ -63,14 +106,22 @@ export const HeaderLogo: FC<HeaderLogoProps> = ({ brand, headline }) => {
                   style={{ display: "block", borderRadius: producerLogoBorderRadius }}
                   width={producerThumbSize}
                 />
-              </Column>
-              <Column style={{ verticalAlign: "middle" as const }}>
-                <Text style={producerSublineStyle}>{brand.brandName}</Text>
-              </Column>
-            </Row>
-          ) : (
-            <Text style={producerSublineStyle}>{brand.brandName}</Text>
-          )}
+              ) : (
+                <BrandInitial
+                  letter={initial}
+                  size={producerThumbSize}
+                  solidColor={solidColor}
+                  backgroundImage={backgroundImage}
+                  onGradientText={onGradientText}
+                  borderColor={borderColor}
+                  extraStyle={{ display: "block" }}
+                />
+              )}
+            </Column>
+            <Column style={{ verticalAlign: "middle" as const }}>
+              <Text style={producerSublineStyle}>{brand.brandName}</Text>
+            </Column>
+          </Row>
         </>
       ) : (
         <>
@@ -85,7 +136,17 @@ export const HeaderLogo: FC<HeaderLogoProps> = ({ brand, headline }) => {
                 borderRadius: producerLogoBorderRadius,
               }}
             />
-          ) : null}
+          ) : (
+            <BrandInitial
+              letter={initial}
+              size={32}
+              solidColor={solidColor}
+              backgroundImage={backgroundImage}
+              onGradientText={onGradientText}
+              borderColor={borderColor}
+              extraStyle={{ margin: "0 0 4px", display: "block" }}
+            />
+          )}
           <Text
             style={{
               margin: 0,

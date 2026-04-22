@@ -51,7 +51,7 @@ export const CustomerAuthMagicLink: FC<CustomerAuthMagicLinkProps> = ({
 
   return (
     <EmailLayout previewText={previewText} theme={theme}>
-      <HeaderLogo brand={brand} headline={eventOrBrandName} />
+      <HeaderLogo brand={brand} theme={theme} headline={eventOrBrandName} />
       <Text
         style={{
           margin: "0 0 16px",
