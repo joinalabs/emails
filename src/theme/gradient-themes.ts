@@ -35,9 +35,10 @@ const themeMap: Record<ThemeName, ThemeSpec> = {
   White: {
     from: "#ffffff",
     to: "#ffffff",
+    // Outlook (no CSS): white button, dark text — acceptable fallback.
+    // Light/dark mode appearance is handled by a CSS class injected via EmailLayout.
     solidColor: "#ffffff",
     onGradientText: "#18181b",
-    borderColor: "#18181b",
   },
   Peach: { from: "#F89C3D", to: "#E44C35", solidColor: "#E44C35", onGradientText: "#ffffff" },
   Snow: { from: "#31AAC7", to: "#0E68E3", solidColor: "#0E68E3", onGradientText: "#ffffff" },

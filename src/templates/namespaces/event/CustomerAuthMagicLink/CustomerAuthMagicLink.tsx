@@ -50,7 +50,7 @@ export const CustomerAuthMagicLink: FC<CustomerAuthMagicLinkProps> = ({
   const previewText = `${eventOrBrandName} — ${c.subjectPreview}`;
 
   return (
-    <EmailLayout previewText={previewText}>
+    <EmailLayout previewText={previewText} theme={theme}>
       <HeaderLogo brand={brand} headline={eventOrBrandName} />
       <Text
         style={{

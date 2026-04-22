@@ -10,10 +10,12 @@ export interface PrimaryButtonProps {
 
 export const PrimaryButton: FC<PrimaryButtonProps> = ({ theme, href, label }) => {
   const { backgroundImage, solidColor, onGradientText, borderColor } = resolveTheme(theme);
+  const isWhite = theme === "White";
   return (
     <Section style={{ textAlign: "center", margin: "24px 0" }}>
       <Button
         href={href}
+        className={isWhite ? "joina-btn-white" : undefined}
         style={{
           backgroundColor: solidColor,
           backgroundImage,

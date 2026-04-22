@@ -43,7 +43,7 @@ export const AccountMemberPasswordReset: FC<AccountMemberPasswordResetProps> = (
   const { solidColor } = resolveTheme(theme);
 
   return (
-    <EmailLayout previewText={c.subjectPreview}>
+    <EmailLayout previewText={c.subjectPreview} theme={theme}>
       <Text style={{ margin: "0 0 10px", fontSize: "20px", fontWeight: 600 }}>{c.title}</Text>
       <Text style={{ margin: "0 0 20px", fontSize: "14px", lineHeight: "22px", color: muted }}>
         {c.intro}
