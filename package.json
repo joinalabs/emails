@@ -21,7 +21,7 @@
     "check": "biome check .",
     "check:write": "biome check --write .",
     "typecheck": "tsc --noEmit",
-    "dev": "email dev --dir src/namespaces",
+    "dev": "email dev --dir src/preview",
     "prepare": "node scripts/husky-if-present.mjs",
     "prepublishOnly": "npm run build && npm run check && npm run typecheck"
   },

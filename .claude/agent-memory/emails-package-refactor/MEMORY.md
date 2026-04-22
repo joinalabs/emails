@@ -1,0 +1,2 @@
+- [Backoffice namespace templates](project_backoffice_templates.md) — Current template names, rename history (Producer prefix dropped), and purpose of each backoffice template
+- [Event namespace templates](project_event_templates.md) — Current template names and purpose of each event namespace template, including the portal/QR pairing pattern
