@@ -31,7 +31,7 @@ export interface AccountInviteCopy {
 }
 
 export interface AccountInviteProps {
-  theme: ThemeName;
+  theme?: ThemeName;
   brand: Brand;
   /** Signed or time-limited URL for first signup (password + producer/company profile). */
   inviteUrl: string;
@@ -56,7 +56,7 @@ const defaultCopy: Required<AccountInviteCopy> = {
 };
 
 export const AccountInvite: FC<AccountInviteProps> = ({
-  theme,
+  theme = "White",
   brand,
   inviteUrl,
   inviteeEmail,

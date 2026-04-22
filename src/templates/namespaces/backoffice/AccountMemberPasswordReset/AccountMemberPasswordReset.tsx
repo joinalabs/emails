@@ -15,7 +15,7 @@ export interface AccountMemberPasswordResetCopy {
 }
 
 export interface AccountMemberPasswordResetProps {
-  theme: ThemeName;
+  theme?: ThemeName;
   brand: Brand;
   resetUrl: string;
   copy?: AccountMemberPasswordResetCopy;
@@ -33,7 +33,7 @@ const defaultCopy: Required<AccountMemberPasswordResetCopy> = {
 };
 
 export const AccountMemberPasswordReset: FC<AccountMemberPasswordResetProps> = ({
-  theme,
+  theme = "White",
   brand,
   resetUrl,
   copy,

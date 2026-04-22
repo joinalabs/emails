@@ -26,7 +26,7 @@ export interface AccountMemberInviteCopy {
 }
 
 export interface AccountMemberInviteProps {
-  theme: ThemeName;
+  theme?: ThemeName;
   brand: Brand;
   /** Signed or time-limited URL to accept the team invite (typically set password on first join). */
   inviteUrl: string;
@@ -56,7 +56,7 @@ const defaultCopy: Required<AccountMemberInviteCopy> = {
 };
 
 export const AccountMemberInvite: FC<AccountMemberInviteProps> = ({
-  theme,
+  theme = "White",
   brand,
   inviteUrl,
   organizationOrProducerName,
