@@ -22,9 +22,8 @@ export interface AccountInviteCopy {
   intro?: string;
   /** Paragraph after the detail card, before the CTA (first account + company data). */
   onboardingHint?: string;
-  organizationLabel?: string;
   inviteeEmailLabel?: string;
-  /** Shown in the card footer; use `{brandName}` for `brand.brandName` (platform). */
+  /** Shown below the detail card (or standalone when no inviteeEmail is set); use `{brandName}` for `brand.brandName`. */
   footerNote?: string;
   ctaLabel?: string;
   fallbackPrompt?: string;
@@ -36,8 +35,6 @@ export interface AccountInviteProps {
   brand: Brand;
   /** Signed or time-limited URL for first signup (password + producer/company profile). */
   inviteUrl: string;
-  /** Producer / organization name (shown in the card and preheader). */
-  organizationOrProducerName: string;
   /** E-mail this invite was sent to (recommended). */
   inviteeEmail?: string;
   copy?: AccountInviteCopy;
@@ -50,7 +47,6 @@ const defaultCopy: Required<AccountInviteCopy> = {
     "Boas notícias: você recebeu um convite para abrir a primeira conta da produtora na plataforma Joina. Ficamos muito felizes em ter vocês por aqui — quando quiser começar, é só usar o botão abaixo.",
   onboardingHint:
     "Na primeira vez você escolhe uma senha e preenche os dados da empresa e da sua conta. Em poucos minutos você já deixa tudo pronto para brilhar com os eventos na Joina — muito bom ter vocês com a gente!",
-  organizationLabel: "Produtora / organização",
   inviteeEmailLabel: "Convite enviado para",
   footerNote: "Com carinho, equipe Joina ✨",
   ctaLabel: "Quero começar!",
@@ -63,39 +59,37 @@ export const AccountInvite: FC<AccountInviteProps> = ({
   theme,
   brand,
   inviteUrl,
-  organizationOrProducerName,
   inviteeEmail,
   copy,
 }) => {
   const c = { ...defaultCopy, ...copy };
   const muted = defaultEmailThemeTokens.mutedTextColor;
   const { solidColor } = resolveTheme(theme);
-  const previewText = `${organizationOrProducerName} — ${c.subjectPreview}`;
   const footerText = c.footerNote.replace("{brandName}", brand.brandName);
 
-  const rows: EmailDetailRow[] = [
-    { id: "org", title: c.organizationLabel, value: organizationOrProducerName },
-  ];
+  const rows: EmailDetailRow[] = [];
   const trimmedInvitee = inviteeEmail?.trim();
   if (trimmedInvitee) {
     rows.push({ id: "invitee-email", title: c.inviteeEmailLabel, value: trimmedInvitee });
   }
 
+  const footerNote = (
+    <Text style={{ margin: 0, fontSize: "13px", lineHeight: "20px", color: muted }}>
+      {footerText}
+    </Text>
+  );
+
   return (
-    <EmailLayout previewText={previewText} theme={theme}>
+    <EmailLayout previewText={c.subjectPreview} theme={theme}>
       <Text style={{ margin: "0 0 10px", fontSize: "20px", fontWeight: 600 }}>{c.title}</Text>
       <Text style={{ margin: "0 0 16px", fontSize: "14px", lineHeight: "22px", color: muted }}>
         {c.intro}
       </Text>
-      <EmailDetailList
-        rows={rows}
-        sectionStyle={{ marginBottom: "16px" }}
-        footer={
-          <Text style={{ margin: 0, fontSize: "13px", lineHeight: "20px", color: muted }}>
-            {footerText}
-          </Text>
-        }
-      />
+      {rows.length > 0 ? (
+        <EmailDetailList rows={rows} sectionStyle={{ marginBottom: "16px" }} footer={footerNote} />
+      ) : (
+        <div style={{ marginBottom: "16px" }}>{footerNote}</div>
+      )}
       <Text style={{ margin: "0 0 20px", fontSize: "14px", lineHeight: "22px", color: muted }}>
         {c.onboardingHint}
       </Text>

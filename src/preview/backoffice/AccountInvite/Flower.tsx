@@ -6,7 +6,6 @@ const previewProps = {
   theme: "Flower",
   brand: previewBrand,
   inviteUrl: "https://example.com/backoffice/primeiro-acesso?token=preview",
-  organizationOrProducerName: "Produtora Example",
   inviteeEmail: "contato@produtora.example",
 } satisfies AccountInviteProps;
 
