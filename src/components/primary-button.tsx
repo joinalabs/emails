@@ -9,7 +9,7 @@ export interface PrimaryButtonProps {
 }
 
 export const PrimaryButton: FC<PrimaryButtonProps> = ({ theme, href, label }) => {
-  const { backgroundImage, solidColor, onGradientText } = resolveTheme(theme);
+  const { backgroundImage, solidColor, onGradientText, borderColor } = resolveTheme(theme);
   return (
     <Section style={{ textAlign: "center", margin: "24px 0" }}>
       <Button
@@ -18,6 +18,7 @@ export const PrimaryButton: FC<PrimaryButtonProps> = ({ theme, href, label }) =>
           backgroundColor: solidColor,
           backgroundImage,
           color: onGradientText,
+          border: `1px solid ${borderColor}`,
           borderRadius: "10px",
           fontWeight: 600,
           fontSize: "14px",

@@ -5,5 +5,9 @@ export const previewBrand: Brand = {
   logoUrl: "https://placehold.co/40x40/0E68E3/ffffff/png?text=P",
 };
 
+export const previewBrandNoLogo: Brand = {
+  brandName: "Produtora Example",
+};
+
 export const placeholderQrSrc =
   "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=JoinaPreview&margin=4&format=png";
