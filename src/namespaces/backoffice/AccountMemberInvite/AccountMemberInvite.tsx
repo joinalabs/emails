@@ -7,7 +7,8 @@ import {
   FooterLegal,
   PrimaryButton,
 } from "../../../components/index.js";
-import type { EmailTheme } from "../../../theme/types.js";
+import { resolveTheme, type ThemeName } from "../../../theme/gradient-themes.js";
+import type { Brand } from "../../../theme/types.js";
 import { defaultEmailThemeTokens } from "../../../theme/types.js";
 
 export interface AccountMemberInviteCopy {
@@ -25,7 +26,8 @@ export interface AccountMemberInviteCopy {
 }
 
 export interface AccountMemberInviteProps {
-  theme: EmailTheme;
+  theme: ThemeName;
+  brand: Brand;
   /** Signed or time-limited URL to accept the team invite (typically set password on first join). */
   inviteUrl: string;
   /** Producer or organization name shown in the card (and in the preheader). */
@@ -55,6 +57,7 @@ const defaultCopy: Required<AccountMemberInviteCopy> = {
 
 export const AccountMemberInvite: FC<AccountMemberInviteProps> = ({
   theme,
+  brand,
   inviteUrl,
   organizationOrProducerName,
   inviteeEmail,
@@ -62,7 +65,8 @@ export const AccountMemberInvite: FC<AccountMemberInviteProps> = ({
   copy,
 }) => {
   const c = { ...defaultCopy, ...copy };
-  const muted = theme.mutedTextColor ?? defaultEmailThemeTokens.mutedTextColor;
+  const muted = defaultEmailThemeTokens.mutedTextColor;
+  const { solidColor } = resolveTheme(theme);
   const inviterText = inviterName
     ? c.inviterLine.replace("{name}", inviterName)
     : "O convite veio de alguém do time com acesso à plataforma Joina.";
@@ -78,13 +82,12 @@ export const AccountMemberInvite: FC<AccountMemberInviteProps> = ({
   }
 
   return (
-    <EmailLayout previewText={previewText} theme={theme}>
+    <EmailLayout previewText={previewText}>
       <Text style={{ margin: "0 0 10px", fontSize: "20px", fontWeight: 600 }}>{c.title}</Text>
       <Text style={{ margin: "0 0 16px", fontSize: "14px", lineHeight: "22px", color: muted }}>
         {c.intro}
       </Text>
       <EmailDetailList
-        theme={theme}
         rows={rows}
         sectionStyle={{ marginBottom: "16px" }}
         footer={
@@ -105,7 +108,7 @@ export const AccountMemberInvite: FC<AccountMemberInviteProps> = ({
         style={{
           fontSize: "12px",
           lineHeight: "18px",
-          color: theme.primaryColor,
+          color: solidColor,
           wordBreak: "break-all" as const,
         }}
       >
@@ -114,7 +117,7 @@ export const AccountMemberInvite: FC<AccountMemberInviteProps> = ({
       <Text style={{ margin: "20px 0 0", fontSize: "12px", lineHeight: "18px", color: muted }}>
         {c.securityNote}
       </Text>
-      <FooterLegal theme={theme} />
+      <FooterLegal legalFooter={brand.legalFooter} />
     </EmailLayout>
   );
 };

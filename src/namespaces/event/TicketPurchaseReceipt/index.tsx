@@ -6,12 +6,13 @@ export type {
 } from "./TicketPurchaseReceipt.js";
 export { TicketPurchaseReceipt } from "./TicketPurchaseReceipt.js";
 
-import { previewTheme } from "../../_preview-fixtures.js";
+import { previewBrand, previewThemeName } from "../../_preview-fixtures.js";
 import type { TicketPurchaseReceiptProps } from "./TicketPurchaseReceipt.js";
 import { TicketPurchaseReceipt } from "./TicketPurchaseReceipt.js";
 
 const previewProps = {
-  theme: previewTheme,
+  theme: previewThemeName,
+  brand: previewBrand,
   eventName: "Show ao vivo",
   orderId: "ord_preview_001",
   purchasedAtFormatted: "13/04/2026 15:42",

@@ -20,5 +20,7 @@ export * as backoffice from "./namespaces/backoffice/index.js";
 export * as event from "./namespaces/event/index.js";
 export { render } from "./render.js";
 
-export type { EmailTheme } from "./theme/types.js";
+export type { ResolvedTheme, ThemeName } from "./theme/gradient-themes.js";
+export { resolveTheme } from "./theme/gradient-themes.js";
+export type { Brand } from "./theme/types.js";
 export { defaultEmailThemeTokens } from "./theme/types.js";

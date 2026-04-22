@@ -1,7 +1,8 @@
 import type { FC } from "react";
 import { Link, Text } from "react-email";
 import { EmailLayout, FooterLegal, PrimaryButton } from "../../../components/index.js";
-import type { EmailTheme } from "../../../theme/types.js";
+import { resolveTheme, type ThemeName } from "../../../theme/gradient-themes.js";
+import type { Brand } from "../../../theme/types.js";
 import { defaultEmailThemeTokens } from "../../../theme/types.js";
 
 export interface AccountMemberPasswordResetCopy {
@@ -14,7 +15,8 @@ export interface AccountMemberPasswordResetCopy {
 }
 
 export interface AccountMemberPasswordResetProps {
-  theme: EmailTheme;
+  theme: ThemeName;
+  brand: Brand;
   resetUrl: string;
   copy?: AccountMemberPasswordResetCopy;
 }
@@ -32,14 +34,16 @@ const defaultCopy: Required<AccountMemberPasswordResetCopy> = {
 
 export const AccountMemberPasswordReset: FC<AccountMemberPasswordResetProps> = ({
   theme,
+  brand,
   resetUrl,
   copy,
 }) => {
   const c = { ...defaultCopy, ...copy };
-  const muted = theme.mutedTextColor ?? defaultEmailThemeTokens.mutedTextColor;
+  const muted = defaultEmailThemeTokens.mutedTextColor;
+  const { solidColor } = resolveTheme(theme);
 
   return (
-    <EmailLayout previewText={c.subjectPreview} theme={theme}>
+    <EmailLayout previewText={c.subjectPreview}>
       <Text style={{ margin: "0 0 10px", fontSize: "20px", fontWeight: 600 }}>{c.title}</Text>
       <Text style={{ margin: "0 0 20px", fontSize: "14px", lineHeight: "22px", color: muted }}>
         {c.intro}
@@ -53,7 +57,7 @@ export const AccountMemberPasswordReset: FC<AccountMemberPasswordResetProps> = (
         style={{
           fontSize: "12px",
           lineHeight: "18px",
-          color: theme.primaryColor,
+          color: solidColor,
           wordBreak: "break-all" as const,
         }}
       >
@@ -62,7 +66,7 @@ export const AccountMemberPasswordReset: FC<AccountMemberPasswordResetProps> = (
       <Text style={{ margin: "20px 0 0", fontSize: "12px", lineHeight: "18px", color: muted }}>
         {c.securityNote}
       </Text>
-      <FooterLegal theme={theme} />
+      <FooterLegal legalFooter={brand.legalFooter} />
     </EmailLayout>
   );
 };

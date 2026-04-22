@@ -1,7 +1,6 @@
 import type { CSSProperties, FC, ReactNode } from "react";
 import { Fragment } from "react";
 import { Section, Text } from "react-email";
-import type { EmailTheme } from "../theme/types.js";
 import { defaultEmailThemeTokens } from "../theme/types.js";
 
 export interface EmailDetailRow {
@@ -13,7 +12,6 @@ export interface EmailDetailRow {
 }
 
 export interface EmailDetailListProps {
-  theme: EmailTheme;
   rows: EmailDetailRow[];
   /** Rendered inside the card after all rows (e.g. inviter line on producer invite). */
   footer?: ReactNode;
@@ -27,14 +25,9 @@ const sectionBase: CSSProperties = {
   padding: "10px 14px",
 };
 
-export const EmailDetailList: FC<EmailDetailListProps> = ({
-  theme,
-  rows,
-  footer,
-  sectionStyle,
-}) => {
-  const muted = theme.mutedTextColor ?? defaultEmailThemeTokens.mutedTextColor;
-  const text = theme.textColor ?? defaultEmailThemeTokens.textColor;
+export const EmailDetailList: FC<EmailDetailListProps> = ({ rows, footer, sectionStyle }) => {
+  const muted = defaultEmailThemeTokens.mutedTextColor;
+  const text = defaultEmailThemeTokens.textColor;
 
   const labelStyle: CSSProperties = {
     margin: 0,

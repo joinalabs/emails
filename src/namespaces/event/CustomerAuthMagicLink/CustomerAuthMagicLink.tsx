@@ -1,7 +1,8 @@
 import type { FC } from "react";
 import { Link, Text } from "react-email";
 import { EmailLayout, FooterLegal, HeaderLogo, PrimaryButton } from "../../../components/index.js";
-import type { EmailTheme } from "../../../theme/types.js";
+import { resolveTheme, type ThemeName } from "../../../theme/gradient-themes.js";
+import type { Brand } from "../../../theme/types.js";
 import { defaultEmailThemeTokens } from "../../../theme/types.js";
 
 export interface CustomerAuthMagicLinkCopy {
@@ -14,7 +15,8 @@ export interface CustomerAuthMagicLinkCopy {
 }
 
 export interface CustomerAuthMagicLinkProps {
-  theme: EmailTheme;
+  theme: ThemeName;
+  brand: Brand;
   magicLinkUrl: string;
   eventOrBrandName: string;
   copy?: CustomerAuthMagicLinkCopy;
@@ -32,17 +34,19 @@ const defaultCopy: Required<CustomerAuthMagicLinkCopy> = {
 
 export const CustomerAuthMagicLink: FC<CustomerAuthMagicLinkProps> = ({
   theme,
+  brand,
   magicLinkUrl,
   eventOrBrandName,
   copy,
 }) => {
   const c = { ...defaultCopy, ...copy };
-  const muted = theme.mutedTextColor ?? defaultEmailThemeTokens.mutedTextColor;
+  const muted = defaultEmailThemeTokens.mutedTextColor;
+  const { solidColor } = resolveTheme(theme);
   const previewText = `${eventOrBrandName} — ${c.subjectPreview}`;
 
   return (
-    <EmailLayout previewText={previewText} theme={theme}>
-      <HeaderLogo theme={theme} headline={eventOrBrandName} />
+    <EmailLayout previewText={previewText}>
+      <HeaderLogo brand={brand} headline={eventOrBrandName} />
       <Text
         style={{
           margin: "0 0 16px",
@@ -71,7 +75,7 @@ export const CustomerAuthMagicLink: FC<CustomerAuthMagicLinkProps> = ({
         style={{
           fontSize: "12px",
           lineHeight: "18px",
-          color: theme.primaryColor,
+          color: solidColor,
           wordBreak: "break-all" as const,
         }}
       >
@@ -80,7 +84,7 @@ export const CustomerAuthMagicLink: FC<CustomerAuthMagicLinkProps> = ({
       <Text style={{ margin: "20px 0 0", fontSize: "12px", lineHeight: "18px", color: muted }}>
         {c.securityNote}
       </Text>
-      <FooterLegal theme={theme} />
+      <FooterLegal legalFooter={brand.legalFooter} />
     </EmailLayout>
   );
 };

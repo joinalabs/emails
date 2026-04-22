@@ -1,18 +1,15 @@
 import type { FC } from "react";
 import { Hr, Section, Text } from "react-email";
-import type { EmailTheme } from "../theme/types.js";
 import { defaultEmailThemeTokens } from "../theme/types.js";
 
 export interface FooterLegalProps {
-  theme: EmailTheme;
+  legalFooter?: string;
 }
 
-export const FooterLegal: FC<FooterLegalProps> = ({ theme }) => {
-  if (!theme.legalFooter) {
+export const FooterLegal: FC<FooterLegalProps> = ({ legalFooter }) => {
+  if (!legalFooter) {
     return null;
   }
-
-  const muted = theme.mutedTextColor ?? defaultEmailThemeTokens.mutedTextColor;
 
   return (
     <Section style={{ marginTop: "28px" }}>
@@ -22,10 +19,10 @@ export const FooterLegal: FC<FooterLegalProps> = ({ theme }) => {
           margin: 0,
           fontSize: "11px",
           lineHeight: "16px",
-          color: muted,
+          color: defaultEmailThemeTokens.mutedTextColor,
         }}
       >
-        {theme.legalFooter}
+        {legalFooter}
       </Text>
     </Section>
   );

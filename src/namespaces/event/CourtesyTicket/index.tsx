@@ -1,12 +1,13 @@
 export type { CourtesyTicketCopy, CourtesyTicketProps } from "./CourtesyTicket.js";
 export { CourtesyTicket } from "./CourtesyTicket.js";
 
-import { previewTheme } from "../../_preview-fixtures.js";
+import { previewBrand, previewThemeName } from "../../_preview-fixtures.js";
 import type { CourtesyTicketProps } from "./CourtesyTicket.js";
 import { CourtesyTicket } from "./CourtesyTicket.js";
 
 const previewProps = {
-  theme: previewTheme,
+  theme: previewThemeName,
+  brand: previewBrand,
   eventName: "Show ao vivo",
   eventDate: "20/04/2026",
   eventTime: "21:00",

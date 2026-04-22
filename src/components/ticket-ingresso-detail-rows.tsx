@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { Link } from "react-email";
-import type { EmailTheme } from "../theme/types.js";
+import { resolveTheme, type ThemeName } from "../theme/gradient-themes.js";
 import { defaultEmailThemeTokens } from "../theme/types.js";
 import type { EmailDetailRow } from "./email-detail-list.js";
 
@@ -15,13 +15,13 @@ export interface TicketIngressoFareLabels {
 export interface TicketIngressoDetailLabels {
   titular: string;
   horaLocal: string;
-  /** Row title for the fare kind (e.g. “Ticket type” → Full / Half / Complimentary). */
+  /** Row title for the fare kind (e.g. "Ticket type" → Full / Half / Complimentary). */
   ticketTypeFare: string;
   lot: string;
 }
 
 export interface BuildTicketIngressoDetailRowsInput {
-  theme: EmailTheme;
+  theme: ThemeName;
   labels: TicketIngressoDetailLabels;
   fareLabels: TicketIngressoFareLabels;
   /**
@@ -62,9 +62,9 @@ function fareLabelForKind(kind: TicketFareKind, fareLabels: TicketIngressoFareLa
   }
 }
 
-function titularRowValue(ownerName: string, ownerEmail: string, theme: EmailTheme): ReactNode {
-  const text = theme.textColor ?? defaultEmailThemeTokens.textColor;
-  const muted = theme.mutedTextColor ?? defaultEmailThemeTokens.mutedTextColor;
+function titularRowValue(ownerName: string, ownerEmail: string): ReactNode {
+  const text = defaultEmailThemeTokens.textColor;
+  const muted = defaultEmailThemeTokens.mutedTextColor;
   return (
     <>
       <span style={{ color: text, fontWeight: 600 }}>{ownerName.trim()}</span>
@@ -76,13 +76,13 @@ function titularRowValue(ownerName: string, ownerEmail: string, theme: EmailThem
 function venueNameLink(
   venue: string,
   venueMapsUrl: string | undefined,
-  theme: EmailTheme,
+  theme: ThemeName,
 ): ReactNode {
-  const primary = theme.primaryColor;
+  const { solidColor } = resolveTheme(theme);
   const maps = venueMapsUrl?.trim();
   if (maps) {
     return (
-      <Link href={maps} style={{ color: primary, textDecoration: "underline" }}>
+      <Link href={maps} style={{ color: solidColor, textDecoration: "underline" }}>
         {venue}
       </Link>
     );
@@ -91,7 +91,7 @@ function venueNameLink(
 }
 
 function horaLocalValue(
-  theme: EmailTheme,
+  theme: ThemeName,
   eventDate: string | undefined,
   eventTime: string | undefined,
   eventDateFormatted: string | undefined,
@@ -147,7 +147,7 @@ export function buildTicketIngressoDetailRows(
     {
       id: "titular",
       title: labels.titular,
-      value: titularRowValue(ownerName, ownerEmail, theme),
+      value: titularRowValue(ownerName, ownerEmail),
     },
   ];
 

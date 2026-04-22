@@ -1,12 +1,13 @@
 export type { TicketCopy, TicketProps } from "./Ticket.js";
 export { Ticket } from "./Ticket.js";
 
-import { previewTheme } from "../../_preview-fixtures.js";
+import { previewBrand, previewThemeName } from "../../_preview-fixtures.js";
 import type { TicketProps } from "./Ticket.js";
 import { Ticket } from "./Ticket.js";
 
 const previewProps = {
-  theme: previewTheme,
+  theme: previewThemeName,
+  brand: previewBrand,
   ownerName: "Maria Silva",
   ownerEmail: "maria@example.com",
   eventName: "Show ao vivo",

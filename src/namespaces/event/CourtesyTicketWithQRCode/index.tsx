@@ -4,12 +4,13 @@ export type {
 } from "./CourtesyTicketWithQRCode.js";
 export { CourtesyTicketWithQRCode } from "./CourtesyTicketWithQRCode.js";
 
-import { placeholderQrSrc, previewTheme } from "../../_preview-fixtures.js";
+import { placeholderQrSrc, previewBrand, previewThemeName } from "../../_preview-fixtures.js";
 import type { CourtesyTicketWithQRCodeProps } from "./CourtesyTicketWithQRCode.js";
 import { CourtesyTicketWithQRCode } from "./CourtesyTicketWithQRCode.js";
 
 const previewProps = {
-  theme: previewTheme,
+  theme: previewThemeName,
+  brand: previewBrand,
   eventName: "Show ao vivo",
   eventDate: "20/04/2026",
   eventTime: "21:00",

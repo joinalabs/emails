@@ -11,7 +11,8 @@ import {
   PrimaryButton,
   type TicketFareKind,
 } from "../../../components/index.js";
-import type { EmailTheme } from "../../../theme/types.js";
+import type { ThemeName } from "../../../theme/gradient-themes.js";
+import type { Brand } from "../../../theme/types.js";
 import { defaultEmailThemeTokens } from "../../../theme/types.js";
 
 export interface TicketWithQRCodeCopy {
@@ -31,7 +32,8 @@ export interface TicketWithQRCodeCopy {
 }
 
 export interface TicketWithQRCodeProps {
-  theme: EmailTheme;
+  theme: ThemeName;
+  brand: Brand;
   ownerName: string;
   ownerEmail: string;
   eventName: string;
@@ -70,6 +72,7 @@ const defaultCopy: Required<TicketWithQRCodeCopy> = {
 
 export const TicketWithQRCode: FC<TicketWithQRCodeProps> = ({
   theme,
+  brand,
   ownerName,
   ownerEmail,
   eventName,
@@ -85,7 +88,7 @@ export const TicketWithQRCode: FC<TicketWithQRCodeProps> = ({
   copy,
 }) => {
   const c = { ...defaultCopy, ...copy };
-  const muted = theme.mutedTextColor ?? defaultEmailThemeTokens.mutedTextColor;
+  const muted = defaultEmailThemeTokens.mutedTextColor;
   const previewText = `${eventName} — ${c.subjectPreview}`;
 
   const detailRows = buildTicketIngressoDetailRows({
@@ -113,8 +116,8 @@ export const TicketWithQRCode: FC<TicketWithQRCodeProps> = ({
   });
 
   return (
-    <EmailLayout previewText={previewText} theme={theme}>
-      <HeaderLogo theme={theme} headline={eventName} />
+    <EmailLayout previewText={previewText}>
+      <HeaderLogo brand={brand} headline={eventName} />
       <Text style={{ margin: "0 0 16px", fontSize: "20px", fontWeight: 600 }}>{c.title}</Text>
       <Text style={{ margin: "0 0 20px", fontSize: "14px", lineHeight: "22px", color: muted }}>
         {c.intro}
@@ -140,12 +143,12 @@ export const TicketWithQRCode: FC<TicketWithQRCodeProps> = ({
           </Column>
         </Row>
       </Section>
-      <EmailDetailList theme={theme} rows={detailRows} />
+      <EmailDetailList rows={detailRows} />
       {ctaUrl ? <PrimaryButton href={ctaUrl} label={c.ctaLabel} theme={theme} /> : null}
       <Text style={{ margin: "20px 0 0", fontSize: "12px", lineHeight: "18px", color: muted }}>
         {c.securityNote}
       </Text>
-      <FooterLegal theme={theme} />
+      <FooterLegal legalFooter={brand.legalFooter} />
     </EmailLayout>
   );
 };

@@ -1,13 +1,13 @@
 import type { FC } from "react";
 import { Column, Img, Row, Section, Text } from "react-email";
-import type { EmailTheme } from "../theme/types.js";
+import type { Brand } from "../theme/types.js";
 import { defaultEmailThemeTokens } from "../theme/types.js";
 
 export interface HeaderLogoProps {
-  theme: EmailTheme;
+  brand: Brand;
   /**
    * Primary line: **event** (or campaign) name for attendee-facing mail, left-aligned.
-   * When omitted, the block shows producer `logoUrl` (if any) + `theme.brandName` only.
+   * When omitted, the block shows producer `logoUrl` (if any) + `brand.brandName` only.
    */
   headline?: string;
 }
@@ -15,13 +15,13 @@ export interface HeaderLogoProps {
 /** Producer logo rounding: same for thumb (event mail) and header logo (admin / receipt). */
 const producerLogoBorderRadius = "3px";
 
-/** Producer “icon” beside name when `headline` is set (attendee mail). */
+/** Producer "icon" beside name when `headline` is set (attendee mail). */
 const producerThumbSize = 16;
 const producerNameGap = 3;
 
-export const HeaderLogo: FC<HeaderLogoProps> = ({ theme, headline }) => {
-  const text = theme.textColor ?? defaultEmailThemeTokens.textColor;
-  const muted = theme.mutedTextColor ?? defaultEmailThemeTokens.mutedTextColor;
+export const HeaderLogo: FC<HeaderLogoProps> = ({ brand, headline }) => {
+  const text = defaultEmailThemeTokens.textColor;
+  const muted = defaultEmailThemeTokens.mutedTextColor;
   const trimmed = headline?.trim();
   const hasHeadline = Boolean(trimmed && trimmed.length > 0);
 
@@ -47,7 +47,7 @@ export const HeaderLogo: FC<HeaderLogoProps> = ({ theme, headline }) => {
           >
             {trimmed}
           </Text>
-          {theme.logoUrl ? (
+          {brand.logoUrl ? (
             <Row>
               <Column
                 style={{
@@ -57,28 +57,28 @@ export const HeaderLogo: FC<HeaderLogoProps> = ({ theme, headline }) => {
                 }}
               >
                 <Img
-                  alt={theme.brandName}
+                  alt={brand.brandName}
                   height={producerThumbSize}
-                  src={theme.logoUrl}
+                  src={brand.logoUrl}
                   style={{ display: "block", borderRadius: producerLogoBorderRadius }}
                   width={producerThumbSize}
                 />
               </Column>
               <Column style={{ verticalAlign: "middle" as const }}>
-                <Text style={producerSublineStyle}>{theme.brandName}</Text>
+                <Text style={producerSublineStyle}>{brand.brandName}</Text>
               </Column>
             </Row>
           ) : (
-            <Text style={producerSublineStyle}>{theme.brandName}</Text>
+            <Text style={producerSublineStyle}>{brand.brandName}</Text>
           )}
         </>
       ) : (
         <>
-          {theme.logoUrl ? (
+          {brand.logoUrl ? (
             <Img
-              alt={theme.brandName}
+              alt={brand.brandName}
               height={32}
-              src={theme.logoUrl}
+              src={brand.logoUrl}
               style={{
                 margin: "0 0 4px",
                 display: "block",
@@ -95,7 +95,7 @@ export const HeaderLogo: FC<HeaderLogoProps> = ({ theme, headline }) => {
               color: text,
             }}
           >
-            {theme.brandName}
+            {brand.brandName}
           </Text>
         </>
       )}

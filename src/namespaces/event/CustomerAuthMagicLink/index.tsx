@@ -4,12 +4,13 @@ export type {
 } from "./CustomerAuthMagicLink.js";
 export { CustomerAuthMagicLink } from "./CustomerAuthMagicLink.js";
 
-import { previewTheme } from "../../_preview-fixtures.js";
+import { previewBrand, previewThemeName } from "../../_preview-fixtures.js";
 import type { CustomerAuthMagicLinkProps } from "./CustomerAuthMagicLink.js";
 import { CustomerAuthMagicLink } from "./CustomerAuthMagicLink.js";
 
 const previewProps = {
-  theme: previewTheme,
+  theme: previewThemeName,
+  brand: previewBrand,
   magicLinkUrl: "https://example.com/auth/magic?token=preview_token",
   eventOrBrandName: "Show ao vivo",
 } satisfies CustomerAuthMagicLinkProps;

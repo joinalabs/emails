@@ -7,7 +7,8 @@ import {
   FooterLegal,
   HeaderLogo,
 } from "../../../components/index.js";
-import type { EmailTheme } from "../../../theme/types.js";
+import type { ThemeName } from "../../../theme/gradient-themes.js";
+import type { Brand } from "../../../theme/types.js";
 import { defaultEmailThemeTokens } from "../../../theme/types.js";
 
 /** Last four digits only for display (never pass a full PAN in email props). */
@@ -19,7 +20,7 @@ function cardLast4Digits(raw: string | undefined): string | null {
 }
 
 /** Renders document with bullets for hidden digits + last two in body color. */
-function payerTaxIdDisplayValue(raw: string, theme: EmailTheme): string | ReactNode {
+function payerTaxIdDisplayValue(raw: string): string | ReactNode {
   const digits = raw.replace(/\D/g, "");
   if (digits.length < 2) {
     return raw.trim();
@@ -27,14 +28,14 @@ function payerTaxIdDisplayValue(raw: string, theme: EmailTheme): string | ReactN
   const last2 = digits.slice(-2);
   const maskLen = Math.max(0, digits.length - 2);
   const bullets = maskLen > 0 ? "•".repeat(maskLen) : "";
-  const textColor = theme.textColor ?? defaultEmailThemeTokens.textColor;
-  const mutedColor = theme.mutedTextColor ?? defaultEmailThemeTokens.mutedTextColor;
+  const textColor = defaultEmailThemeTokens.textColor;
+  const mutedColor = defaultEmailThemeTokens.mutedTextColor;
   if (!bullets) {
     return <span style={{ color: textColor }}>{last2}</span>;
   }
   return (
     <>
-      <span style={{ color: mutedColor }}>{`${bullets} `}</span>
+      <span style={{ color: mutedColor }}>{`${bullets} `}</span>
       <span style={{ color: textColor }}>{last2}</span>
     </>
   );
@@ -43,16 +44,15 @@ function payerTaxIdDisplayValue(raw: string, theme: EmailTheme): string | ReactN
 function paymentMethodDetailValue(
   method: string,
   cardLast4Raw: string | undefined,
-  theme: EmailTheme,
 ): string | ReactNode {
   const last4 = cardLast4Digits(cardLast4Raw);
-  const textColor = theme.textColor ?? defaultEmailThemeTokens.textColor;
-  const mutedColor = theme.mutedTextColor ?? defaultEmailThemeTokens.mutedTextColor;
+  const textColor = defaultEmailThemeTokens.textColor;
+  const mutedColor = defaultEmailThemeTokens.mutedTextColor;
   if (!last4) return method;
   return (
     <>
       <span style={{ color: textColor }}>{method}</span>
-      <span style={{ color: mutedColor }}>{` •••• ${last4}`}</span>
+      <span style={{ color: mutedColor }}>{` •••• ${last4}`}</span>
     </>
   );
 }
@@ -104,7 +104,8 @@ export interface TicketPurchaseReceiptCopy {
 }
 
 export interface TicketPurchaseReceiptProps {
-  theme: EmailTheme;
+  theme: ThemeName;
+  brand: Brand;
   /**
    * Event name shown in the header (same pattern as ticket emails). For orders spanning multiple
    * events, pass a label chosen by the API (e.g. shared venue name or a short summary).
@@ -146,7 +147,8 @@ const defaultCopy: Required<TicketPurchaseReceiptCopy> = {
 };
 
 export const TicketPurchaseReceipt: FC<TicketPurchaseReceiptProps> = ({
-  theme,
+  theme: _theme,
+  brand,
   eventName,
   orderId,
   purchasedAtFormatted,
@@ -160,12 +162,12 @@ export const TicketPurchaseReceipt: FC<TicketPurchaseReceiptProps> = ({
   copy,
 }) => {
   const c = { ...defaultCopy, ...copy };
-  const muted = theme.mutedTextColor ?? defaultEmailThemeTokens.mutedTextColor;
+  const muted = defaultEmailThemeTokens.mutedTextColor;
   const previewText = `${eventName} — ${c.subjectPreview}`;
 
   const trimmedPayment = paymentMethod?.trim();
   const paymentMethodValue = trimmedPayment
-    ? paymentMethodDetailValue(trimmedPayment, paymentCardLast4, theme)
+    ? paymentMethodDetailValue(trimmedPayment, paymentCardLast4)
     : undefined;
   const orderDetailRows: EmailDetailRow[] = [
     { title: c.orderIdLabel, value: orderId },
@@ -189,7 +191,7 @@ export const TicketPurchaseReceipt: FC<TicketPurchaseReceiptProps> = ({
               {
                 id: "payer-tax-id",
                 title: c.payerTaxIdLabel,
-                value: payerTaxIdDisplayValue(trimmedPayerTaxId, theme),
+                value: payerTaxIdDisplayValue(trimmedPayerTaxId),
               },
             ]
           : []),
@@ -197,27 +199,19 @@ export const TicketPurchaseReceipt: FC<TicketPurchaseReceiptProps> = ({
     : null;
 
   return (
-    <EmailLayout previewText={previewText} theme={theme}>
-      <HeaderLogo theme={theme} headline={eventName} />
+    <EmailLayout previewText={previewText}>
+      <HeaderLogo brand={brand} headline={eventName} />
       <Text style={{ margin: "0 0 10px", fontSize: "20px", fontWeight: 600 }}>{c.title}</Text>
       <Text style={{ margin: "0 0 20px", fontSize: "14px", lineHeight: "22px", color: muted }}>
         {c.intro}
       </Text>
-      <EmailDetailList
-        theme={theme}
-        rows={orderDetailRows}
-        sectionStyle={{ marginBottom: "16px" }}
-      />
+      <EmailDetailList rows={orderDetailRows} sectionStyle={{ marginBottom: "16px" }} />
       {payerDetailRows ? (
         <>
           <Text style={{ margin: "0 0 8px", fontSize: "13px", fontWeight: 600, color: muted }}>
             {c.payerSectionHeading}
           </Text>
-          <EmailDetailList
-            theme={theme}
-            rows={payerDetailRows}
-            sectionStyle={{ marginBottom: "16px" }}
-          />
+          <EmailDetailList rows={payerDetailRows} sectionStyle={{ marginBottom: "16px" }} />
         </>
       ) : null}
       <Text style={{ margin: "0 0 8px", fontSize: "13px", fontWeight: 600, color: muted }}>
@@ -294,7 +288,7 @@ export const TicketPurchaseReceipt: FC<TicketPurchaseReceiptProps> = ({
           <span style={{ float: "right" as const }}>{totalFormatted}</span>
         </Text>
       </Section>
-      <FooterLegal theme={theme} />
+      <FooterLegal legalFooter={brand.legalFooter} />
     </EmailLayout>
   );
 };

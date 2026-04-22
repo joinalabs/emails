@@ -54,7 +54,7 @@ import { render, event, backoffice } from "@joinalabs/emails";
 import type { EmailTheme } from "@joinalabs/emails";
 
 const theme: EmailTheme = {
-  primaryColor: "#006FEE",
+  gradientTheme: "Snow",
   brandName: "Produtora Example",
   logoUrl: "https://cdn.example.com/logo.png",
 };
@@ -189,13 +189,15 @@ Every template accepts `theme: EmailTheme`:
 
 | Field | Required | Description |
 | --- | --- | --- |
-| `primaryColor` | yes | Buttons, links, and accents |
+| `gradientTheme` | yes | Named gradient from the Joina palette — drives buttons, links, and accents |
 | `brandName` | yes | Shown in the header when there is no logo |
-| `logoUrl` | no | HTTPS URL for the logo image |
+| `logoUrl` | no | HTTPS URL for the logo image; when absent the brand name is rendered as text |
 | `fontFamily` | no | Font stack (layout includes a safe fallback) |
 | `legalFooter` | no | Short legal line above the end of the template |
 | `surfaceColor` | no | Main card background |
 | `textColor` / `mutedTextColor` | no | Primary and secondary text colors |
+
+Available `gradientTheme` values: `"White"` `"Peach"` `"Snow"` `"Wave"` `"Rainbow"` `"CrystalBall"` `"Flower"` `"World"` `"Alien"` `"Vulkan"`.
 
 Default layout tokens (neutral background, borders) are exported as `defaultEmailThemeTokens`.
 
@@ -243,7 +245,7 @@ import { render, event } from "@joinalabs/emails";
 import type { EmailTheme } from "@joinalabs/emails";
 
 const theme: EmailTheme = {
-  primaryColor: "#006FEE",
+  gradientTheme: "Snow",
   brandName: "Produtora Example",
   logoUrl: "https://cdn.example.com/logo.png",
 };

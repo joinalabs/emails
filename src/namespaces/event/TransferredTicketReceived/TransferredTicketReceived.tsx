@@ -11,7 +11,8 @@ import {
   PrimaryButton,
   type TicketFareKind,
 } from "../../../components/index.js";
-import type { EmailTheme } from "../../../theme/types.js";
+import { resolveTheme, type ThemeName } from "../../../theme/gradient-themes.js";
+import type { Brand } from "../../../theme/types.js";
 import { defaultEmailThemeTokens } from "../../../theme/types.js";
 
 export interface TransferredTicketReceivedCopy {
@@ -33,7 +34,8 @@ export interface TransferredTicketReceivedCopy {
 }
 
 export interface TransferredTicketReceivedProps {
-  theme: EmailTheme;
+  theme: ThemeName;
+  brand: Brand;
   /** New holder (recipient of the transfer), shown in the detail card. */
   ownerName: string;
   ownerEmail: string;
@@ -73,6 +75,7 @@ const defaultCopy: Required<TransferredTicketReceivedCopy> = {
 
 export const TransferredTicketReceived: FC<TransferredTicketReceivedProps> = ({
   theme,
+  brand,
   ownerName,
   ownerEmail,
   eventName,
@@ -88,7 +91,8 @@ export const TransferredTicketReceived: FC<TransferredTicketReceivedProps> = ({
   copy,
 }) => {
   const c = { ...defaultCopy, ...copy };
-  const muted = theme.mutedTextColor ?? defaultEmailThemeTokens.mutedTextColor;
+  const muted = defaultEmailThemeTokens.mutedTextColor;
+  const { solidColor } = resolveTheme(theme);
   const previewText = `${eventName} — ${c.subjectPreview}`;
   const trimmedTransferrer = transferrerName?.trim();
   const transferrerText = trimmedTransferrer
@@ -120,8 +124,8 @@ export const TransferredTicketReceived: FC<TransferredTicketReceivedProps> = ({
   });
 
   return (
-    <EmailLayout previewText={previewText} theme={theme}>
-      <HeaderLogo theme={theme} headline={eventName} />
+    <EmailLayout previewText={previewText}>
+      <HeaderLogo brand={brand} headline={eventName} />
       <Text style={{ margin: "0 0 16px", fontSize: "20px", fontWeight: 600 }}>{c.title}</Text>
       <Text style={{ margin: "0 0 16px", fontSize: "14px", lineHeight: "22px", color: muted }}>
         {c.intro}
@@ -131,7 +135,7 @@ export const TransferredTicketReceived: FC<TransferredTicketReceivedProps> = ({
           {transferrerText}
         </Text>
       ) : null}
-      <EmailDetailList theme={theme} rows={detailRows} sectionStyle={{ marginBottom: "16px" }} />
+      <EmailDetailList rows={detailRows} sectionStyle={{ marginBottom: "16px" }} />
       <PrimaryButton href={ticketUrl} label={c.ctaLabel} theme={theme} />
       <Text style={{ margin: "16px 0 8px", fontSize: "12px", color: muted }}>
         {c.fallbackPrompt}
@@ -141,7 +145,7 @@ export const TransferredTicketReceived: FC<TransferredTicketReceivedProps> = ({
         style={{
           fontSize: "12px",
           lineHeight: "18px",
-          color: theme.primaryColor,
+          color: solidColor,
           wordBreak: "break-all" as const,
         }}
       >
@@ -150,7 +154,7 @@ export const TransferredTicketReceived: FC<TransferredTicketReceivedProps> = ({
       <Text style={{ margin: "20px 0 0", fontSize: "12px", lineHeight: "18px", color: muted }}>
         {c.securityNote}
       </Text>
-      <FooterLegal theme={theme} />
+      <FooterLegal legalFooter={brand.legalFooter} />
     </EmailLayout>
   );
 };

@@ -1,12 +1,13 @@
 export type { AccountMemberInviteCopy, AccountMemberInviteProps } from "./AccountMemberInvite.js";
 export { AccountMemberInvite } from "./AccountMemberInvite.js";
 
-import { previewTheme } from "../../_preview-fixtures.js";
+import { previewBrand, previewThemeName } from "../../_preview-fixtures.js";
 import type { AccountMemberInviteProps } from "./AccountMemberInvite.js";
 import { AccountMemberInvite } from "./AccountMemberInvite.js";
 
 const previewProps = {
-  theme: previewTheme,
+  theme: previewThemeName,
+  brand: previewBrand,
   inviteUrl: "https://example.com/backoffice/convite?token=preview",
   organizationOrProducerName: "Produtora Example",
   inviteeEmail: "novo.membro@example.com",

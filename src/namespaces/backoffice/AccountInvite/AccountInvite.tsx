@@ -12,7 +12,8 @@ import {
   FooterLegal,
   PrimaryButton,
 } from "../../../components/index.js";
-import type { EmailTheme } from "../../../theme/types.js";
+import { resolveTheme, type ThemeName } from "../../../theme/gradient-themes.js";
+import type { Brand } from "../../../theme/types.js";
 import { defaultEmailThemeTokens } from "../../../theme/types.js";
 
 export interface AccountInviteCopy {
@@ -23,7 +24,7 @@ export interface AccountInviteCopy {
   onboardingHint?: string;
   organizationLabel?: string;
   inviteeEmailLabel?: string;
-  /** Shown in the card footer; use `{brandName}` for `theme.brandName` (platform). */
+  /** Shown in the card footer; use `{brandName}` for `brand.brandName` (platform). */
   footerNote?: string;
   ctaLabel?: string;
   fallbackPrompt?: string;
@@ -31,7 +32,8 @@ export interface AccountInviteCopy {
 }
 
 export interface AccountInviteProps {
-  theme: EmailTheme;
+  theme: ThemeName;
+  brand: Brand;
   /** Signed or time-limited URL for first signup (password + producer/company profile). */
   inviteUrl: string;
   /** Producer / organization name (shown in the card and preheader). */
@@ -59,15 +61,17 @@ const defaultCopy: Required<AccountInviteCopy> = {
 
 export const AccountInvite: FC<AccountInviteProps> = ({
   theme,
+  brand,
   inviteUrl,
   organizationOrProducerName,
   inviteeEmail,
   copy,
 }) => {
   const c = { ...defaultCopy, ...copy };
-  const muted = theme.mutedTextColor ?? defaultEmailThemeTokens.mutedTextColor;
+  const muted = defaultEmailThemeTokens.mutedTextColor;
+  const { solidColor } = resolveTheme(theme);
   const previewText = `${organizationOrProducerName} — ${c.subjectPreview}`;
-  const footerText = c.footerNote.replace("{brandName}", theme.brandName);
+  const footerText = c.footerNote.replace("{brandName}", brand.brandName);
 
   const rows: EmailDetailRow[] = [
     { id: "org", title: c.organizationLabel, value: organizationOrProducerName },
@@ -78,13 +82,12 @@ export const AccountInvite: FC<AccountInviteProps> = ({
   }
 
   return (
-    <EmailLayout previewText={previewText} theme={theme}>
+    <EmailLayout previewText={previewText}>
       <Text style={{ margin: "0 0 10px", fontSize: "20px", fontWeight: 600 }}>{c.title}</Text>
       <Text style={{ margin: "0 0 16px", fontSize: "14px", lineHeight: "22px", color: muted }}>
         {c.intro}
       </Text>
       <EmailDetailList
-        theme={theme}
         rows={rows}
         sectionStyle={{ marginBottom: "16px" }}
         footer={
@@ -105,7 +108,7 @@ export const AccountInvite: FC<AccountInviteProps> = ({
         style={{
           fontSize: "12px",
           lineHeight: "18px",
-          color: theme.primaryColor,
+          color: solidColor,
           wordBreak: "break-all" as const,
         }}
       >
@@ -114,7 +117,7 @@ export const AccountInvite: FC<AccountInviteProps> = ({
       <Text style={{ margin: "20px 0 0", fontSize: "12px", lineHeight: "18px", color: muted }}>
         {c.securityNote}
       </Text>
-      <FooterLegal theme={theme} />
+      <FooterLegal legalFooter={brand.legalFooter} />
     </EmailLayout>
   );
 };

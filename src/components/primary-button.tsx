@@ -1,21 +1,23 @@
 import type { FC } from "react";
 import { Button, Section } from "react-email";
-import type { EmailTheme } from "../theme/types.js";
+import { resolveTheme, type ThemeName } from "../theme/gradient-themes.js";
 
 export interface PrimaryButtonProps {
-  theme: EmailTheme;
+  theme: ThemeName;
   href: string;
   label: string;
 }
 
 export const PrimaryButton: FC<PrimaryButtonProps> = ({ theme, href, label }) => {
+  const { backgroundImage, solidColor, onGradientText } = resolveTheme(theme);
   return (
     <Section style={{ textAlign: "center", margin: "24px 0" }}>
       <Button
         href={href}
         style={{
-          backgroundColor: theme.primaryColor,
-          color: "#ffffff",
+          backgroundColor: solidColor,
+          backgroundImage,
+          color: onGradientText,
           borderRadius: "10px",
           fontWeight: 600,
           fontSize: "14px",

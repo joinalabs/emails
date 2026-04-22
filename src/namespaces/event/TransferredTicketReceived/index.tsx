@@ -4,12 +4,13 @@ export type {
 } from "./TransferredTicketReceived.js";
 export { TransferredTicketReceived } from "./TransferredTicketReceived.js";
 
-import { previewTheme } from "../../_preview-fixtures.js";
+import { previewBrand, previewThemeName } from "../../_preview-fixtures.js";
 import type { TransferredTicketReceivedProps } from "./TransferredTicketReceived.js";
 import { TransferredTicketReceived } from "./TransferredTicketReceived.js";
 
 const previewProps = {
-  theme: previewTheme,
+  theme: previewThemeName,
+  brand: previewBrand,
   ownerName: "Carlos Novo",
   ownerEmail: "carlos.novo@example.com",
   eventName: "Show ao vivo",

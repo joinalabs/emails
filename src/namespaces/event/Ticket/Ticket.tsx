@@ -11,7 +11,8 @@ import {
   PrimaryButton,
   type TicketFareKind,
 } from "../../../components/index.js";
-import type { EmailTheme } from "../../../theme/types.js";
+import type { ThemeName } from "../../../theme/gradient-themes.js";
+import type { Brand } from "../../../theme/types.js";
 import { defaultEmailThemeTokens } from "../../../theme/types.js";
 
 export interface TicketCopy {
@@ -30,7 +31,8 @@ export interface TicketCopy {
 }
 
 export interface TicketProps {
-  theme: EmailTheme;
+  theme: ThemeName;
+  brand: Brand;
   ownerName: string;
   ownerEmail: string;
   eventName: string;
@@ -64,6 +66,7 @@ const defaultCopy: Required<TicketCopy> = {
 
 export const Ticket: FC<TicketProps> = ({
   theme,
+  brand,
   ownerName,
   ownerEmail,
   eventName,
@@ -78,7 +81,7 @@ export const Ticket: FC<TicketProps> = ({
   copy,
 }) => {
   const c = { ...defaultCopy, ...copy };
-  const muted = theme.mutedTextColor ?? defaultEmailThemeTokens.mutedTextColor;
+  const muted = defaultEmailThemeTokens.mutedTextColor;
   const previewText = `${eventName} — ${c.subjectPreview}`;
 
   const detailRows = buildTicketIngressoDetailRows({
@@ -106,18 +109,18 @@ export const Ticket: FC<TicketProps> = ({
   });
 
   return (
-    <EmailLayout previewText={previewText} theme={theme}>
-      <HeaderLogo theme={theme} headline={eventName} />
+    <EmailLayout previewText={previewText}>
+      <HeaderLogo brand={brand} headline={eventName} />
       <Text style={{ margin: "0 0 16px", fontSize: "20px", fontWeight: 600 }}>{c.title}</Text>
       <Text style={{ margin: "0 0 24px", fontSize: "14px", lineHeight: "22px", color: muted }}>
         {c.intro}
       </Text>
-      <EmailDetailList theme={theme} rows={detailRows} sectionStyle={{ marginBottom: "8px" }} />
+      <EmailDetailList rows={detailRows} sectionStyle={{ marginBottom: "8px" }} />
       <PrimaryButton href={ticketUrl} label={c.ctaLabel} theme={theme} />
       <Text style={{ margin: "20px 0 0", fontSize: "12px", lineHeight: "18px", color: muted }}>
         {c.securityNote}
       </Text>
-      <FooterLegal theme={theme} />
+      <FooterLegal legalFooter={brand.legalFooter} />
     </EmailLayout>
   );
 };

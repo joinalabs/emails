@@ -1,12 +1,13 @@
 export type { TicketWithQRCodeCopy, TicketWithQRCodeProps } from "./TicketWithQRCode.js";
 export { TicketWithQRCode } from "./TicketWithQRCode.js";
 
-import { placeholderQrSrc, previewTheme } from "../../_preview-fixtures.js";
+import { placeholderQrSrc, previewBrand, previewThemeName } from "../../_preview-fixtures.js";
 import type { TicketWithQRCodeProps } from "./TicketWithQRCode.js";
 import { TicketWithQRCode } from "./TicketWithQRCode.js";
 
 const previewProps = {
-  theme: previewTheme,
+  theme: previewThemeName,
+  brand: previewBrand,
   ownerName: "Maria Silva",
   ownerEmail: "maria@example.com",
   eventName: "Show ao vivo",
