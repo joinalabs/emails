@@ -24,7 +24,6 @@ function BrandInitial({
   solidColor,
   backgroundImage,
   onGradientText,
-  borderColor,
   extraStyle,
 }: {
   letter: string;
@@ -32,7 +31,6 @@ function BrandInitial({
   solidColor: string;
   backgroundImage: string;
   onGradientText: string;
-  borderColor: string;
   extraStyle?: CSSProperties;
 }) {
   return (
@@ -43,14 +41,12 @@ function BrandInitial({
         backgroundColor: solidColor,
         backgroundImage,
         color: onGradientText,
-        border: `1px solid ${borderColor}`,
         borderRadius: producerLogoBorderRadius,
         display: "inline-block",
         textAlign: "center",
-        lineHeight: `${size - 2}px`,
+        lineHeight: `${size}px`,
         fontSize: `${Math.round(size * 0.56)}px`,
         fontWeight: 700,
-        boxSizing: "border-box",
         ...extraStyle,
       }}
     >
@@ -62,7 +58,7 @@ function BrandInitial({
 export const HeaderLogo: FC<HeaderLogoProps> = ({ brand, theme, headline }) => {
   const text = defaultEmailThemeTokens.textColor;
   const muted = defaultEmailThemeTokens.mutedTextColor;
-  const { solidColor, backgroundImage, onGradientText, borderColor } = resolveTheme(theme);
+  const { solidColor, backgroundImage, onGradientText } = resolveTheme(theme);
 
   const trimmed = headline?.trim();
   const hasHeadline = Boolean(trimmed && trimmed.length > 0);
@@ -113,7 +109,6 @@ export const HeaderLogo: FC<HeaderLogoProps> = ({ brand, theme, headline }) => {
                   solidColor={solidColor}
                   backgroundImage={backgroundImage}
                   onGradientText={onGradientText}
-                  borderColor={borderColor}
                   extraStyle={{ display: "block" }}
                 />
               )}
@@ -143,7 +138,6 @@ export const HeaderLogo: FC<HeaderLogoProps> = ({ brand, theme, headline }) => {
               solidColor={solidColor}
               backgroundImage={backgroundImage}
               onGradientText={onGradientText}
-              borderColor={borderColor}
               extraStyle={{ margin: "0 0 4px", display: "block" }}
             />
           )}
