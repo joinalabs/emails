@@ -24,11 +24,6 @@ interface ThemeSpec {
   solidColor: string;
   /** Foreground color for text rendered on top of the gradient (e.g. button label). */
   onGradientText: string;
-  /**
-   * Border color for the button. Transparent for colored themes; set explicitly
-   * for light themes (e.g. White) where the button background blends into the canvas.
-   */
-  borderColor?: string;
 }
 
 const themeMap: Record<ThemeName, ThemeSpec> = {
@@ -39,9 +34,6 @@ const themeMap: Record<ThemeName, ThemeSpec> = {
     // Light/dark mode appearance is handled by a CSS class injected via EmailLayout.
     solidColor: "#ffffff",
     onGradientText: "#18181b",
-    // Used as the border on the initial box (and as the Outlook button border fallback;
-    // the joina-btn-white CSS class overrides to transparent in modern clients).
-    borderColor: "#e4e4e7",
   },
   Peach: { from: "#F89C3D", to: "#E44C35", solidColor: "#E44C35", onGradientText: "#ffffff" },
   Snow: { from: "#31AAC7", to: "#0E68E3", solidColor: "#0E68E3", onGradientText: "#ffffff" },
@@ -61,16 +53,13 @@ export interface ResolvedTheme {
   solidColor: string;
   /** Text color to use on top of the gradient background (e.g. button label). */
   onGradientText: string;
-  /** Border color for buttons on light themes; `"transparent"` for colored themes. */
-  borderColor: string;
 }
 
 export function resolveTheme(name: ThemeName): ResolvedTheme {
-  const { from, to, solidColor, onGradientText, borderColor } = themeMap[name];
+  const { from, to, solidColor, onGradientText } = themeMap[name];
   return {
     backgroundImage: `linear-gradient(to top right, ${from}, ${to})`,
     solidColor,
     onGradientText,
-    borderColor: borderColor ?? "transparent",
   };
 }
