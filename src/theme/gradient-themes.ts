@@ -28,22 +28,65 @@ interface ThemeSpec {
 
 const themeMap: Record<ThemeName, ThemeSpec> = {
   White: {
-    from: "#ffffff",
-    to: "#ffffff",
-    // Outlook (no CSS): white button, dark text — acceptable fallback.
-    // Light/dark mode appearance is handled by a CSS class injected via EmailLayout.
-    solidColor: "#ffffff",
-    onGradientText: "#18181b",
+    from: "#18181b",
+    to: "#18181b",
+    solidColor: "#18181b",
+    onGradientText: "#ffffff",
   },
-  Peach: { from: "#F89C3D", to: "#E44C35", solidColor: "#E44C35", onGradientText: "#ffffff" },
-  Snow: { from: "#31AAC7", to: "#0E68E3", solidColor: "#0E68E3", onGradientText: "#ffffff" },
-  Wave: { from: "#0A3777", to: "#0E63DF", solidColor: "#0E63DF", onGradientText: "#ffffff" },
-  Rainbow: { from: "#DC71BC", to: "#725DC5", solidColor: "#725DC5", onGradientText: "#ffffff" },
-  CrystalBall: { from: "#BF4F99", to: "#15346E", solidColor: "#BF4F99", onGradientText: "#ffffff" },
-  Flower: { from: "#F67469", to: "#E875B9", solidColor: "#F67469", onGradientText: "#ffffff" },
-  World: { from: "#5AC0C8", to: "#22875F", solidColor: "#22875F", onGradientText: "#ffffff" },
-  Alien: { from: "#1C2E50", to: "#4D5C77", solidColor: "#4D5C77", onGradientText: "#ffffff" },
-  Vulkan: { from: "#A62A18", to: "#46290F", solidColor: "#A62A18", onGradientText: "#ffffff" },
+  Peach: {
+    from: "#F89C3D",
+    to: "#E44C35",
+    solidColor: "#E44C35",
+    onGradientText: "#ffffff",
+  },
+  Snow: {
+    from: "#31AAC7",
+    to: "#0E68E3",
+    solidColor: "#0E68E3",
+    onGradientText: "#ffffff",
+  },
+  Wave: {
+    from: "#0A3777",
+    to: "#0E63DF",
+    solidColor: "#0E63DF",
+    onGradientText: "#ffffff",
+  },
+  Rainbow: {
+    from: "#DC71BC",
+    to: "#725DC5",
+    solidColor: "#725DC5",
+    onGradientText: "#ffffff",
+  },
+  CrystalBall: {
+    from: "#BF4F99",
+    to: "#15346E",
+    solidColor: "#BF4F99",
+    onGradientText: "#ffffff",
+  },
+  Flower: {
+    from: "#F67469",
+    to: "#E875B9",
+    solidColor: "#F67469",
+    onGradientText: "#ffffff",
+  },
+  World: {
+    from: "#5AC0C8",
+    to: "#22875F",
+    solidColor: "#22875F",
+    onGradientText: "#ffffff",
+  },
+  Alien: {
+    from: "#1C2E50",
+    to: "#4D5C77",
+    solidColor: "#4D5C77",
+    onGradientText: "#ffffff",
+  },
+  Vulkan: {
+    from: "#A62A18",
+    to: "#46290F",
+    solidColor: "#A62A18",
+    onGradientText: "#ffffff",
+  },
 };
 
 export interface ResolvedTheme {

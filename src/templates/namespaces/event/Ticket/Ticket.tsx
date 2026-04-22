@@ -109,7 +109,7 @@ export const Ticket: FC<TicketProps> = ({
   });
 
   return (
-    <EmailLayout previewText={previewText} theme={theme}>
+    <EmailLayout previewText={previewText}>
       <HeaderLogo brand={brand} theme={theme} headline={eventName} />
       <Text style={{ margin: "0 0 16px", fontSize: "20px", fontWeight: 600 }}>{c.title}</Text>
       <Text style={{ margin: "0 0 24px", fontSize: "14px", lineHeight: "22px", color: muted }}>

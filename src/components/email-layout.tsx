@@ -1,36 +1,15 @@
 import type { FC, ReactNode } from "react";
-import { Body, Container, Head, Html, Preview } from "react-email";
-import type { ThemeName } from "../theme/gradient-themes.js";
+import { Body, Container, Html, Preview } from "react-email";
 import { defaultEmailThemeTokens } from "../theme/types.js";
-
-const WHITE_THEME_STYLES = `
-  .joina-btn-white {
-    background-color: #18181b !important;
-    background-image: none !important;
-    color: #ffffff !important;
-    border-color: transparent !important;
-  }
-  @media (prefers-color-scheme: dark) {
-    .joina-btn-white {
-      background-color: #ffffff !important;
-      background-image: none !important;
-      color: #18181b !important;
-      border-color: transparent !important;
-    }
-  }
-`.trim();
 
 export interface EmailLayoutProps {
   previewText: string;
-  /** Pass the template theme so EmailLayout can inject CSS for adaptive themes (e.g. White). */
-  theme?: ThemeName;
   children: ReactNode;
 }
 
-export const EmailLayout: FC<EmailLayoutProps> = ({ previewText, theme, children }) => {
+export const EmailLayout: FC<EmailLayoutProps> = ({ previewText, children }) => {
   return (
     <Html lang="pt-BR">
-      <Head>{theme === "White" && <style>{WHITE_THEME_STYLES}</style>}</Head>
       <Preview>{previewText}</Preview>
       <Body
         style={{

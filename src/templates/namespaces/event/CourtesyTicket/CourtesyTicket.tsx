@@ -108,7 +108,7 @@ export const CourtesyTicket: FC<CourtesyTicketProps> = ({
   });
 
   return (
-    <EmailLayout previewText={previewText} theme={theme}>
+    <EmailLayout previewText={previewText}>
       <HeaderLogo brand={brand} theme={theme} headline={eventName} />
       <Text style={{ margin: "0 0 10px", fontSize: "20px", fontWeight: 600 }}>{c.title}</Text>
       <Text style={{ margin: "0 0 20px", fontSize: "14px", lineHeight: "22px", color: muted }}>

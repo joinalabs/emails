@@ -80,7 +80,7 @@ export const AccountInvite: FC<AccountInviteProps> = ({
   );
 
   return (
-    <EmailLayout previewText={c.subjectPreview} theme={theme}>
+    <EmailLayout previewText={c.subjectPreview}>
       <Text style={{ margin: "0 0 10px", fontSize: "20px", fontWeight: 600 }}>{c.title}</Text>
       <Text style={{ margin: "0 0 16px", fontSize: "14px", lineHeight: "22px", color: muted }}>
         {c.intro}
