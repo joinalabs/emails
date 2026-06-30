@@ -41,18 +41,18 @@ export interface AccountInviteProps {
 }
 
 const defaultCopy: Required<AccountInviteCopy> = {
-  subjectPreview: "✨ Seu convite na Joina",
-  title: "🎉 Vamos configurar sua produtora na Joina?",
+  subjectPreview: "Seu convite na Joina",
+  title: "Vamos configurar sua produtora na Joina",
   intro:
-    "Boas notícias: você recebeu um convite para abrir a primeira conta da produtora na plataforma Joina. Ficamos muito felizes em ter vocês por aqui — quando quiser começar, é só usar o botão abaixo.",
+    "Você recebeu um convite para criar a primeira conta da sua produtora na Joina. Que bom ter você por aqui — é só usar o botão abaixo para começar.",
   onboardingHint:
-    "Na primeira vez você escolhe uma senha e preenche os dados da empresa e da sua conta. Em poucos minutos você já deixa tudo pronto para brilhar com os eventos na Joina — muito bom ter vocês com a gente!",
+    "No primeiro acesso você escolhe uma senha e preenche os dados da empresa e da sua conta. Em poucos minutos tudo fica pronto para você publicar seus eventos na Joina.",
   inviteeEmailLabel: "Convite enviado para",
-  footerNote: "Com carinho, equipe Joina ✨",
-  ctaLabel: "Quero começar!",
+  footerNote: "Com carinho, equipe Joina",
+  ctaLabel: "Começar agora",
   fallbackPrompt: "Se o botão não funcionar, copie e cole este endereço no navegador:",
   securityNote:
-    "Se você não reconhece este convite ou não esperava um acesso à Joina, sem problema — pode ignorar este e-mail.",
+    "Se você não reconhece este convite ou não esperava um acesso à Joina, pode ignorar este e-mail.",
 };
 
 export const AccountInvite: FC<AccountInviteProps> = ({

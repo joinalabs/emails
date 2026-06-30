@@ -40,19 +40,19 @@ export interface AccountMemberInviteProps {
 }
 
 const defaultCopy: Required<AccountMemberInviteCopy> = {
-  subjectPreview: "✨ Convite — time na Joina",
-  title: "🎉 Você foi convidado para o time na Joina!",
+  subjectPreview: "Convite para o time na Joina",
+  title: "Você foi convidado para um time na Joina",
   intro:
-    "O time da produtora abaixo te chamou para colaborar na plataforma Joina — boa notícia! O link é pessoal e seguro; é só usar o botão quando quiser aceitar.",
+    "O time da produtora abaixo convidou você para colaborar na plataforma Joina. O link é pessoal e seguro — use o botão quando quiser aceitar.",
   onboardingHint:
-    "Ao aceitar, você escolhe sua senha e já entra na Joina com a permissão que o time liberou para você. Em poucos passos você já está dentro.",
+    "Ao aceitar, você escolhe sua senha e já entra na Joina com a permissão que o time liberou para você.",
   organizationLabel: "Produtora / organização",
   inviteeEmailLabel: "Convite enviado para",
-  inviterLine: "Convite enviado por {name} ✨",
-  ctaLabel: "Quero entrar!",
+  inviterLine: "Convite enviado por {name}",
+  ctaLabel: "Aceitar convite",
   fallbackPrompt: "Se o botão não funcionar, copie e cole este endereço no navegador:",
   securityNote:
-    "Se esse convite pegou você de surpresa ou não era para você, sem problema — pode ignorar este e-mail.",
+    "Se este convite não era para você, pode ignorar este e-mail.",
 };
 
 export const AccountMemberInvite: FC<AccountMemberInviteProps> = ({

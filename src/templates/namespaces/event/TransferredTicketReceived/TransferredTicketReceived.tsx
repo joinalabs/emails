@@ -58,7 +58,7 @@ const defaultCopy: Required<TransferredTicketReceivedCopy> = {
   subjectPreview: "Ingresso transferido para você",
   title: "Você recebeu um ingresso por transferência",
   intro:
-    "Um ingresso deste evento foi transferido para o seu e-mail. Para acessar, use o botão abaixo.",
+    "Um ingresso deste evento foi transferido para o seu e-mail. Use o botão abaixo para acessá-lo.",
   transferrerLine: "Transferência enviada por {name}.",
   titularLabel: "Titular",
   horaLocalLabel: "Hora e local",

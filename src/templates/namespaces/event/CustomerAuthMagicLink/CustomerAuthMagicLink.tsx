@@ -28,13 +28,13 @@ export interface CustomerAuthMagicLinkProps {
 }
 
 const defaultCopy: Required<CustomerAuthMagicLinkCopy> = {
-  subjectPreview: "✨ Seu link de acesso",
-  title: "🔓 Acesse sua área do evento",
+  subjectPreview: "Seu link de acesso",
+  title: "Acesse sua área do evento",
   intro:
-    "Clique no botão abaixo para acessar com um link seguro e exclusivo. Neste acesso você não precisa informar senha.",
+    "Use o botão abaixo para entrar com um link seguro e exclusivo. Neste acesso você não precisa de senha.",
   ctaLabel: "Entrar agora",
-  fallbackPrompt: "📋 Se o botão não funcionar, copie e cole este endereço no navegador:",
-  securityNote: "🔒 Se você não solicitou este acesso, ignore este e-mail.",
+  fallbackPrompt: "Se o botão não funcionar, copie e cole este endereço no navegador:",
+  securityNote: "Se você não solicitou este acesso, ignore este e-mail.",
 };
 
 export const CustomerAuthMagicLink: FC<CustomerAuthMagicLinkProps> = ({

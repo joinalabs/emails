@@ -131,12 +131,12 @@ export interface TicketPurchaseReceiptProps {
 
 const defaultCopy: Required<TicketPurchaseReceiptCopy> = {
   subjectPreview: "Recibo da sua compra",
-  title: "🧾 Recibo de compra",
-  intro: "Obrigado pela compra! Abaixo está o resumo do pedido.",
+  title: "Recibo de compra",
+  intro: "Obrigado pela compra! Abaixo está o resumo do seu pedido.",
   lineItemsHeading: "Itens",
   subtotalLabel: "Subtotal",
   taxesLabel: "Taxas",
-  totalLabel: "💰 Total",
+  totalLabel: "Total",
   paymentMethodLabel: "Forma de pagamento",
   orderIdLabel: "Pedido",
   purchasedAtLabel: "Data",

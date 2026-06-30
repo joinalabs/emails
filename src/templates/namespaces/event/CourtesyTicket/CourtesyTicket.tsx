@@ -51,7 +51,7 @@ const defaultCopy: Required<CourtesyTicketCopy> = {
   subjectPreview: "Ingresso cortesia",
   title: "Você recebeu um ingresso cortesia",
   intro:
-    "Um ingresso foi emitido em seu nome. Use o botão abaixo para abrir seu ingresso na tela com o seu acesso seguro.",
+    "Um ingresso cortesia foi emitido em seu nome. Use o botão abaixo para abrir seu ingresso, com acesso seguro.",
   titularLabel: "Titular",
   horaLocalLabel: "Hora e local",
   ticketTypeFareLabel: "Tipo do ingresso",

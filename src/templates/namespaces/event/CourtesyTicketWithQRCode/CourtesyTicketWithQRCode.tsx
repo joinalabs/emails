@@ -57,7 +57,7 @@ const defaultCopy: Required<CourtesyTicketWithQRCodeCopy> = {
   subjectPreview: "Ingresso cortesia",
   title: "Você recebeu um ingresso cortesia",
   intro:
-    "Um ingresso foi emitido em seu nome. O QR Code está abaixo para uso na entrada. Você também pode abrir o link para ver o ingresso na tela.",
+    "Um ingresso cortesia foi emitido em seu nome. Apresente o QR Code abaixo na entrada do evento. Se preferir, use o link para abrir o ingresso completo.",
   titularLabel: "Titular",
   horaLocalLabel: "Hora e local",
   ticketTypeFareLabel: "Tipo do ingresso",
