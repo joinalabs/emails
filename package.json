@@ -1,6 +1,6 @@
 {
   "name": "@joinalabs/emails",
-  "version": "0.6.4",
+  "version": "0.6.5",
   "description": "React Email templates for Joina event SaaS flows",
   "type": "module",
   "main": "./dist/index.js",
