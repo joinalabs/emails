@@ -52,7 +52,7 @@ export interface TicketProps {
 const defaultCopy: Required<TicketCopy> = {
   subjectPreview: "Seu ingresso",
   title: "Seu ingresso",
-  intro: "Use o botão abaixo para abrir seu ingresso na tela.",
+  intro: "Seu ingresso está pronto. Use o botão abaixo para abri-lo com acesso seguro.",
   titularLabel: "Titular",
   horaLocalLabel: "Hora e local",
   ticketTypeFareLabel: "Tipo do ingresso",

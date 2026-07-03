@@ -22,14 +22,14 @@ export interface AccountMemberPasswordResetProps {
 }
 
 const defaultCopy: Required<AccountMemberPasswordResetCopy> = {
-  subjectPreview: "🔐 Redefinição de senha",
-  title: "🔑 Redefinir sua senha",
+  subjectPreview: "Redefinição de senha",
+  title: "Redefinir sua senha",
   intro:
-    "Recebemos um pedido para redefinir a senha da sua conta de produtor. Se foi você, é só seguir o botão abaixo ✨",
+    "Recebemos um pedido para redefinir a senha da sua conta na Joina. Se foi você, use o botão abaixo para criar uma nova senha.",
   ctaLabel: "Redefinir senha",
-  fallbackPrompt: "📋 Se o botão não funcionar, copie e cole este endereço no navegador:",
+  fallbackPrompt: "Se o botão não funcionar, copie e cole este endereço no navegador:",
   securityNote:
-    "🔒 Se você não solicitou a redefinição, ignore este e-mail — sua senha permanece a mesma.",
+    "Se você não solicitou a redefinição, ignore este e-mail — sua senha continua a mesma.",
 };
 
 export const AccountMemberPasswordReset: FC<AccountMemberPasswordResetProps> = ({

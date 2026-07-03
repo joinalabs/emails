@@ -57,7 +57,7 @@ const defaultCopy: Required<TicketWithQRCodeCopy> = {
   subjectPreview: "Seu ingresso com QR Code",
   title: "Seu ingresso",
   intro:
-    "Mostre o QR Code na entrada para validar o acesso. O link abaixo abre a página do seu ingresso com as informações completas do evento.",
+    "Apresente o QR Code na entrada do evento para validar seu acesso. O link abaixo abre seu ingresso com todas as informações.",
   titularLabel: "Titular",
   horaLocalLabel: "Hora e local",
   ticketTypeFareLabel: "Tipo do ingresso",
