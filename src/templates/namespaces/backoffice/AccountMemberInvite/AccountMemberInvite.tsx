@@ -51,8 +51,7 @@ const defaultCopy: Required<AccountMemberInviteCopy> = {
   inviterLine: "Convite enviado por {name}",
   ctaLabel: "Aceitar convite",
   fallbackPrompt: "Se o botão não funcionar, copie e cole este endereço no navegador:",
-  securityNote:
-    "Se este convite não era para você, pode ignorar este e-mail.",
+  securityNote: "Se este convite não era para você, pode ignorar este e-mail.",
 };
 
 export const AccountMemberInvite: FC<AccountMemberInviteProps> = ({
