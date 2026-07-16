@@ -311,6 +311,99 @@ All ticket templates share a detail card built by `buildTicketIngressoDetailRows
 
 **Team member invite:** use `backoffice.AccountMemberInvite` when someone who **already has an account** invites another email. Pass `inviterName` when known (`copy.inviterLine` with `{name}`).
 
+## Calendar invites (`.ics`)
+
+`buildEventInviteIcs` builds an [RFC 5545](https://datatracker.ietf.org/doc/html/rfc5545)
+iCalendar string (correct CRLF, line folding, TEXT escaping, UTC conversion) that the
+**sending side attaches** as `text/calendar`. Gmail renders an event block with **Add to
+Calendar**, and **Yes / Maybe / No** RSVP buttons when it's an invite. Like `render`, this
+package only builds the payload — it never sends mail.
+
+Two modes, driven by `method` / `attendees`:
+
+```ts
+import { buildEventInviteIcs } from "@joinalabs/emails";
+
+// Add-to-calendar (no RSVP) — METHOD defaults to PUBLISH:
+const ics = buildEventInviteIcs({
+  title: "AGI Summit 2026 · General Access",
+  startISO: "2026-07-18T12:00:00-03:00",   // required — ISO 8601 with timezone
+  endISO: "2026-07-19T18:00:00-03:00",     // optional; defaults to start + 1h
+  location: "Palace of Fine Arts, 3601 Lyon St, San Francisco, CA",
+  url: "https://example.com/e/agi-2026",
+});
+
+// RSVP invite (Yes/Maybe/No) — pass organizer + attendees; METHOD defaults to REQUEST:
+const invite = buildEventInviteIcs({
+  title: "AGI Summit 2026 · General Access",
+  startISO: "2026-07-18T12:00:00-03:00",
+  location: "Palace of Fine Arts, San Francisco",
+  organizer: { name: "Joina Events", email: "events@yourdomain.com" },
+  attendees: [{ name: "Maria Silva", email: "maria@example.com", rsvp: true }],
+});
+```
+
+### Using it with the email send
+
+Render the HTML with this package, build the `.ics`, and attach both in your mailer. The
+`method` you pass to the mailer **must match** the calendar's `METHOD`.
+
+```tsx
+import { render, event, buildEventInviteIcs } from "@joinalabs/emails";
+
+const recipient = { name: "Maria Silva", email: "maria@example.com" };
+
+// 1. HTML body
+const html = await render(
+  <event.Ticket
+    theme="White"
+    brand={brand}
+    ownerName={recipient.name}
+    ownerEmail={recipient.email}
+    eventName="AGI Summit 2026 · General Access"
+    eventDate="18/07/2026"
+    eventTime="12:00"
+    venue="Palace of Fine Arts, San Francisco"
+    fareKind="full"
+    ticketUrl="https://example.com/ticket/abc"
+  />,
+);
+
+// 2. Calendar invite (RSVP). organizer must differ from the recipient for Gmail to
+//    show Yes/Maybe/No (you can't RSVP to your own event).
+const invite = buildEventInviteIcs({
+  title: "AGI Summit 2026 · General Access",
+  startISO: "2026-07-18T12:00:00-03:00",
+  endISO: "2026-07-19T18:00:00-03:00",
+  location: "Palace of Fine Arts, San Francisco",
+  url: "https://example.com/e/agi-2026",
+  organizer: { name: "Joina Events", email: "events@yourdomain.com" },
+  attendees: [{ ...recipient, rsvp: true }],
+});
+
+// 3. Send: HTML + the .ics as text/calendar with a matching method.
+await transport.sendMail({
+  from: "Joina Events <events@yourdomain.com>",
+  to: recipient.email,
+  subject: "You are invited to AGI Summit 2026",
+  html,
+  icalEvent: { method: "REQUEST", content: invite, filename: "invite.ics" },
+});
+```
+
+The equivalent for other providers (Resend, SES, …) is a MIME part with
+`Content-Type: text/calendar; method=REQUEST; charset=UTF-8` whose body is the returned
+string.
+
+**Gmail notes**
+- `METHOD:REQUEST` (invite) renders reliably; `PUBLISH` (plain add-to-calendar) is largely
+  ignored by Gmail.
+- Gmail **hides the paperclip** for `text/calendar` parts and shows its own event UI instead
+  — that's expected, not a missing attachment.
+- RSVP buttons require the **organizer to differ from the recipient**, and the recipient
+  listed as an `attendee` with `rsvp: true`.
+- Reuse the same `uid` (and bump `sequence`) to send updates or a `CANCEL`.
+
 ## Reusable components
 
 These building-block components are also exported for internal extensions:
@@ -323,6 +416,7 @@ These building-block components are also exported for internal extensions:
 | `PrimaryButton` | Themed CTA button |
 | `FooterLegal` | Conditional legal footer (renders when `theme.legalFooter` is set) |
 | `buildTicketIngressoDetailRows` | Builds the ticket detail rows array for `EmailDetailList` |
+| `buildEventInviteIcs` | Builds an RFC 5545 `.ics` string (add-to-calendar or RSVP invite) for the sender to attach as `text/calendar` |
 
 ## Suggested backlog (prioritise with product)
 
