@@ -1,3 +1,8 @@
+export type {
+  CertificateAvailableProps,
+  CertificateOwner,
+} from "./CertificateAvailable/index.js";
+export { CertificateAvailable } from "./CertificateAvailable/index.js";
 export type { CourtesyTicketCopy, CourtesyTicketProps } from "./CourtesyTicket/index.js";
 export { CourtesyTicket } from "./CourtesyTicket/index.js";
 export type {

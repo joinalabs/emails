@@ -227,6 +227,7 @@ Templates are organised into two namespaces. Import them from `event` or `backof
 | Ticket — link to authenticated screen | `event.Ticket` | `event.TicketProps` |
 | Ticket — transfer received (new holder) | `event.TransferredTicketReceived` | `event.TransferredTicketReceivedProps` |
 | Magic link (event area login) | `event.CustomerAuthMagicLink` | `event.CustomerAuthMagicLinkProps` |
+| Certificate available (download link) | `event.CertificateAvailable` | `event.CertificateAvailableProps` |
 | Complimentary ticket — link only | `event.CourtesyTicket` | `event.CourtesyTicketProps` |
 | Complimentary ticket — QR in email | `event.CourtesyTicketWithQRCode` | `event.CourtesyTicketWithQRCodeProps` |
 
