@@ -120,7 +120,7 @@ export const Ticket: FC<TicketProps> = ({
       <Text style={{ margin: "20px 0 0", fontSize: "12px", lineHeight: "18px", color: muted }}>
         {c.securityNote}
       </Text>
-      <FooterLegal legalFooter={brand.legalFooter} />
+      <FooterLegal legalFooter={brand.legalFooter} supportEmail={brand.supportEmail} />
     </EmailLayout>
   );
 };

@@ -3,10 +3,12 @@ import type { Brand } from "../theme/types.js";
 export const previewBrand: Brand = {
   brandName: "Produtora Example",
   logoUrl: "https://placehold.co/40x40/0E68E3/ffffff/png?text=P",
+  supportEmail: "team@joina.cc",
 };
 
 export const previewBrandNoLogo: Brand = {
   brandName: "Produtora Example",
+  supportEmail: "team@joina.cc",
 };
 
 export const placeholderQrSrc =

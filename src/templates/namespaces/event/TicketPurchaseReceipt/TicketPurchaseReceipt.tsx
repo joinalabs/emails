@@ -288,7 +288,7 @@ export const TicketPurchaseReceipt: FC<TicketPurchaseReceiptProps> = ({
           <span style={{ float: "right" as const }}>{totalFormatted}</span>
         </Text>
       </Section>
-      <FooterLegal legalFooter={brand.legalFooter} />
+      <FooterLegal legalFooter={brand.legalFooter} supportEmail={brand.supportEmail} />
     </EmailLayout>
   );
 };
