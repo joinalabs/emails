@@ -121,7 +121,7 @@ export const CertificateAvailable: FC<CertificateAvailableProps> = ({
       <Text style={{ margin: "20px 0 0", fontSize: "12px", lineHeight: "18px", color: muted }}>
         {SECURITY_NOTE}
       </Text>
-      <FooterLegal legalFooter={brand.legalFooter} />
+      <FooterLegal legalFooter={brand.legalFooter} supportEmail={brand.supportEmail} />
     </EmailLayout>
   );
 };

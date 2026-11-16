@@ -6,6 +6,8 @@ export interface Brand {
   logoUrl?: string;
   /** Short legal text rendered below the footer line. */
   legalFooter?: string;
+  /** Support address shown in the footer ("Precisa de ajuda?…") as a `mailto:` link. Omit to hide the line. */
+  supportEmail?: string;
 }
 
 export const defaultEmailThemeTokens = {

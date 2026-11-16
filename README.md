@@ -194,6 +194,7 @@ Every template accepts `theme: EmailTheme`:
 | `logoUrl` | no | HTTPS URL for the logo image; when absent the brand name is rendered as text |
 | `fontFamily` | no | Font stack (layout includes a safe fallback) |
 | `legalFooter` | no | Short legal line above the end of the template |
+| `supportEmail` | no | Support address; adds "Precisa de ajuda? Responda este e-mail ou escreva para {email}." (a `mailto:` link) to the footer |
 | `surfaceColor` | no | Main card background |
 | `textColor` / `mutedTextColor` | no | Primary and secondary text colors |
 
@@ -415,7 +416,7 @@ These building-block components are also exported for internal extensions:
 | `HeaderLogo` | Producer branding block with optional event headline |
 | `EmailDetailList` | Compact title/value card with optional `footer` slot |
 | `PrimaryButton` | Themed CTA button |
-| `FooterLegal` | Conditional legal footer (renders when `theme.legalFooter` is set) |
+| `FooterLegal` | Conditional footer: the support line (`supportEmail`) and the legal line (`legalFooter`) |
 | `buildTicketIngressoDetailRows` | Builds the ticket detail rows array for `EmailDetailList` |
 | `buildEventInviteIcs` | Builds an RFC 5545 `.ics` string (add-to-calendar or RSVP invite) for the sender to attach as `text/calendar` |
 

@@ -148,7 +148,7 @@ export const CourtesyTicketWithQRCode: FC<CourtesyTicketWithQRCodeProps> = ({
       <Text style={{ margin: "16px 0 0", fontSize: "12px", lineHeight: "18px", color: muted }}>
         {c.footnote}
       </Text>
-      <FooterLegal legalFooter={brand.legalFooter} />
+      <FooterLegal legalFooter={brand.legalFooter} supportEmail={brand.supportEmail} />
     </EmailLayout>
   );
 };
