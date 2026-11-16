@@ -28,5 +28,10 @@ export * as event from "./templates/namespaces/event/index.js";
 
 export type { ResolvedTheme, ThemeName } from "./theme/gradient-themes.js";
 export { resolveTheme } from "./theme/gradient-themes.js";
+export {
+  joinaPrimaryColor,
+  type ProducerMarkColors,
+  resolveProducerMark,
+} from "./theme/producer-mark.js";
 export type { Brand } from "./theme/types.js";
 export { defaultEmailThemeTokens } from "./theme/types.js";

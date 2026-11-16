@@ -1,11 +1,13 @@
 import type { CSSProperties, FC } from "react";
 import { Column, Img, Row, Section, Text } from "react-email";
-import { resolveTheme, type ThemeName } from "../theme/gradient-themes.js";
+import type { ThemeName } from "../theme/gradient-themes.js";
+import { resolveProducerMark } from "../theme/producer-mark.js";
 import type { Brand } from "../theme/types.js";
 import { defaultEmailThemeTokens } from "../theme/types.js";
 
 export interface HeaderLogoProps {
   brand: Brand;
+  /** The email's theme. The header doesn't use it: the producer's mark is in their own color (`brand.color`). */
   theme: ThemeName;
   /**
    * Primary line: **event** (or campaign) name for attendee-facing mail, left-aligned.
@@ -18,19 +20,18 @@ const producerLogoBorderRadius = "3px";
 const producerThumbSize = 16;
 const producerNameGap = 3;
 
+/** The producer's initial on a flat tile of their color, with the ink that reads on it. */
 function BrandInitial({
   letter,
   size,
-  solidColor,
-  backgroundImage,
-  onGradientText,
+  background,
+  ink,
   extraStyle,
 }: {
   letter: string;
   size: number;
-  solidColor: string;
-  backgroundImage: string;
-  onGradientText: string;
+  background: string;
+  ink: string;
   extraStyle?: CSSProperties;
 }) {
   return (
@@ -38,9 +39,8 @@ function BrandInitial({
       style={{
         width: `${size}px`,
         height: `${size}px`,
-        backgroundColor: solidColor,
-        backgroundImage,
-        color: onGradientText,
+        backgroundColor: background,
+        color: ink,
         borderRadius: producerLogoBorderRadius,
         display: "inline-block",
         textAlign: "center",
@@ -55,10 +55,11 @@ function BrandInitial({
   );
 }
 
-export const HeaderLogo: FC<HeaderLogoProps> = ({ brand, theme, headline }) => {
+export const HeaderLogo: FC<HeaderLogoProps> = ({ brand, headline }) => {
   const text = defaultEmailThemeTokens.textColor;
   const muted = defaultEmailThemeTokens.mutedTextColor;
-  const { solidColor, backgroundImage, onGradientText } = resolveTheme(theme);
+  // The producer's color, never the theme's (blueprint store@0.5.0, ST-EMAILS-2).
+  const { background, ink } = resolveProducerMark(brand.color);
 
   const trimmed = headline?.trim();
   const hasHeadline = Boolean(trimmed && trimmed.length > 0);
@@ -106,9 +107,8 @@ export const HeaderLogo: FC<HeaderLogoProps> = ({ brand, theme, headline }) => {
                 <BrandInitial
                   letter={initial}
                   size={producerThumbSize}
-                  solidColor={solidColor}
-                  backgroundImage={backgroundImage}
-                  onGradientText={onGradientText}
+                  background={background}
+                  ink={ink}
                   extraStyle={{ display: "block" }}
                 />
               )}
@@ -135,9 +135,8 @@ export const HeaderLogo: FC<HeaderLogoProps> = ({ brand, theme, headline }) => {
             <BrandInitial
               letter={initial}
               size={32}
-              solidColor={solidColor}
-              backgroundImage={backgroundImage}
-              onGradientText={onGradientText}
+              background={background}
+              ink={ink}
               extraStyle={{ margin: "0 0 4px", display: "block" }}
             />
           )}
