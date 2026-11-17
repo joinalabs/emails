@@ -229,6 +229,10 @@ Templates are organised into two namespaces. Import them from `event` or `backof
 | Ticket — transfer received (new holder) | `event.TransferredTicketReceived` | `event.TransferredTicketReceivedProps` |
 | Magic link (event area login) | `event.CustomerAuthMagicLink` | `event.CustomerAuthMagicLinkProps` |
 | Certificate available (download link) | `event.CertificateAvailable` | `event.CertificateAvailableProps` |
+| Purchase — cancellation received (buyer) | `event.PurchaseCancellationReceived` | `event.PurchaseCancellationReceivedProps` |
+| Purchase — cancelled and refunded (buyer) | `event.PurchaseCancelled` | `event.PurchaseCancelledProps` |
+| Purchase — charged back (buyer) | `event.PurchaseChargedBack` | `event.PurchaseChargedBackProps` |
+| Ticket — cancelled (holder of a transferred ticket) | `event.TicketCancelled` | `event.TicketCancelledProps` |
 | Complimentary ticket — link only | `event.CourtesyTicket` | `event.CourtesyTicketProps` |
 | Complimentary ticket — QR in email | `event.CourtesyTicketWithQRCode` | `event.CourtesyTicketWithQRCodeProps` |
 

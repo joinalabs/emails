@@ -1,5 +1,5 @@
 import type { FC, ReactNode } from "react";
-import { Column, Hr, Row, Section, Text } from "react-email";
+import { Column, Hr, Link, Row, Section, Text } from "react-email";
 import {
   EmailDetailList,
   type EmailDetailRow,
@@ -7,7 +7,7 @@ import {
   FooterLegal,
   HeaderLogo,
 } from "../../../../components/index.js";
-import type { ThemeName } from "../../../../theme/gradient-themes.js";
+import { resolveTheme, type ThemeName } from "../../../../theme/gradient-themes.js";
 import type { Brand } from "../../../../theme/types.js";
 import { defaultEmailThemeTokens } from "../../../../theme/types.js";
 
@@ -101,6 +101,16 @@ export interface TicketPurchaseReceiptCopy {
   payerNameLabel?: string;
   payerEmailLabel?: string;
   payerTaxIdLabel?: string;
+  /** Shown with `cancellation`: `{date}` and `{link}` (finance@0.1.0, FN-EMAILS-4). */
+  cancellationNote?: string;
+}
+
+/** Until when and where the buyer may cancel the purchase and get back all they paid. */
+export interface TicketPurchaseReceiptCancellation {
+  /** Already formatted for the recipient locale (e.g. `20/04/2026 15:42`). */
+  endsAtFormatted: string;
+  /** The buyer's account in the producer's space. */
+  url: string;
 }
 
 export interface TicketPurchaseReceiptProps {
@@ -126,6 +136,8 @@ export interface TicketPurchaseReceiptProps {
    */
   paymentCardLast4?: string;
   payer?: TicketPurchaseReceiptPayer;
+  /** When set, the receipt says until when and where the buyer may cancel. */
+  cancellation?: TicketPurchaseReceiptCancellation;
   copy?: TicketPurchaseReceiptCopy;
 }
 
@@ -144,7 +156,23 @@ const defaultCopy: Required<TicketPurchaseReceiptCopy> = {
   payerNameLabel: "Nome",
   payerEmailLabel: "E-mail",
   payerTaxIdLabel: "Documento",
+  cancellationNote:
+    "Você pode cancelar esta compra até {date} na sua conta, em {link}, e receber de volta tudo o que pagou.",
 };
+
+/** `note` with `{date}` replaced and `{link}` rendered as a link to `url`. */
+function cancellationNoteParts(note: string, endsAt: string, url: string, color: string) {
+  const [before, after = ""] = note.replace("{date}", endsAt).split("{link}");
+  return (
+    <>
+      {before}
+      <Link href={url} style={{ color, wordBreak: "break-all" as const }}>
+        {url}
+      </Link>
+      {after}
+    </>
+  );
+}
 
 export const TicketPurchaseReceipt: FC<TicketPurchaseReceiptProps> = ({
   theme,
@@ -159,6 +187,7 @@ export const TicketPurchaseReceipt: FC<TicketPurchaseReceiptProps> = ({
   paymentMethod,
   paymentCardLast4,
   payer,
+  cancellation,
   copy,
 }) => {
   const c = { ...defaultCopy, ...copy };
@@ -288,6 +317,16 @@ export const TicketPurchaseReceipt: FC<TicketPurchaseReceiptProps> = ({
           <span style={{ float: "right" as const }}>{totalFormatted}</span>
         </Text>
       </Section>
+      {cancellation ? (
+        <Text style={{ margin: "20px 0 0", fontSize: "13px", lineHeight: "20px", color: muted }}>
+          {cancellationNoteParts(
+            c.cancellationNote,
+            cancellation.endsAtFormatted,
+            cancellation.url,
+            resolveTheme(theme).solidColor,
+          )}
+        </Text>
+      ) : null}
       <FooterLegal legalFooter={brand.legalFooter} supportEmail={brand.supportEmail} />
     </EmailLayout>
   );
