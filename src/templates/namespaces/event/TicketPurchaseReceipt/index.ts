@@ -1,4 +1,5 @@
 export type {
+  TicketPurchaseReceiptCancellation,
   TicketPurchaseReceiptCopy,
   TicketPurchaseReceiptLineItem,
   TicketPurchaseReceiptPayer,

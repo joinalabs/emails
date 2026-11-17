@@ -15,9 +15,24 @@ export type {
   CustomerAuthMagicLinkProps,
 } from "./CustomerAuthMagicLink/index.js";
 export { CustomerAuthMagicLink } from "./CustomerAuthMagicLink/index.js";
+export type {
+  PurchaseCancellationReceivedCopy,
+  PurchaseCancellationReceivedProps,
+} from "./PurchaseCancellationReceived/index.js";
+export { PurchaseCancellationReceived } from "./PurchaseCancellationReceived/index.js";
+export type { PurchaseCancelledCopy, PurchaseCancelledProps } from "./PurchaseCancelled/index.js";
+export { PurchaseCancelled } from "./PurchaseCancelled/index.js";
+export type {
+  PurchaseChargedBackCopy,
+  PurchaseChargedBackProps,
+} from "./PurchaseChargedBack/index.js";
+export { PurchaseChargedBack } from "./PurchaseChargedBack/index.js";
 export type { TicketCopy, TicketProps } from "./Ticket/index.js";
 export { Ticket } from "./Ticket/index.js";
+export type { TicketCancelledCopy, TicketCancelledProps } from "./TicketCancelled/index.js";
+export { TicketCancelled } from "./TicketCancelled/index.js";
 export type {
+  TicketPurchaseReceiptCancellation,
   TicketPurchaseReceiptCopy,
   TicketPurchaseReceiptLineItem,
   TicketPurchaseReceiptPayer,
