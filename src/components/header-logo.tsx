@@ -1,7 +1,7 @@
 import type { CSSProperties, FC } from "react";
 import { Column, Img, Row, Section, Text } from "react-email";
 import type { ThemeName } from "../theme/gradient-themes.js";
-import { resolveProducerMark } from "../theme/producer-mark.js";
+import { type ProducerMarkColors, resolveProducerMark } from "../theme/producer-mark.js";
 import type { Brand } from "../theme/types.js";
 import { defaultEmailThemeTokens } from "../theme/types.js";
 
@@ -14,6 +14,10 @@ export interface HeaderLogoProps {
    * When omitted, the block shows producer logo/initial + `brand.brandName` only.
    */
   headline?: string;
+  /** The initial on the mark when there is no logo; defaults to the first letter of `brand.brandName`. */
+  initial?: string;
+  /** The mark's tile and ink, already resolved; defaults to `resolveProducerMark(brand.color)`. */
+  mark?: ProducerMarkColors;
 }
 
 const producerLogoBorderRadius = "3px";
@@ -55,15 +59,20 @@ function BrandInitial({
   );
 }
 
-export const HeaderLogo: FC<HeaderLogoProps> = ({ brand, headline }) => {
+export const HeaderLogo: FC<HeaderLogoProps> = ({
+  brand,
+  headline,
+  initial: initialProp,
+  mark,
+}) => {
   const text = defaultEmailThemeTokens.textColor;
   const muted = defaultEmailThemeTokens.mutedTextColor;
   // The producer's color, never the theme's (blueprint store@0.5.0, ST-EMAILS-2).
-  const { background, ink } = resolveProducerMark(brand.color);
+  const { background, ink } = mark ?? resolveProducerMark(brand.color);
 
   const trimmed = headline?.trim();
   const hasHeadline = Boolean(trimmed && trimmed.length > 0);
-  const initial = (brand.brandName.trim()[0] ?? "?").toUpperCase();
+  const initial = initialProp ?? (brand.brandName.trim()[0] ?? "?").toUpperCase();
 
   const producerSublineStyle = {
     margin: 0,

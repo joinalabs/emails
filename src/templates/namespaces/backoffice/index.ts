@@ -10,3 +10,5 @@ export type {
   AccountMemberPasswordResetProps,
 } from "./AccountMemberPasswordReset/index.js";
 export { AccountMemberPasswordReset } from "./AccountMemberPasswordReset/index.js";
+export type { BillingReceiptCopy, BillingReceiptProps } from "./BillingReceipt/index.js";
+export { BillingReceipt } from "./BillingReceipt/index.js";

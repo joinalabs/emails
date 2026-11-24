@@ -145,9 +145,11 @@ const text = await render(<event.CustomerAuthMagicLink theme={theme} magicLinkUr
 | `npm run check` | `biome check .` |
 | `npm run check:write` | Format and apply safe Biome fixes |
 | `npm run typecheck` | `tsc --noEmit` |
+| `npm test` | Renders every preview and fails on the former brand's name; checks the workflow message's export is current |
+| `npm run export` | Writes `exports/workflow-message.html`, the Go template the workflows worker embeds |
 | `npm run dev` | Starts the React Email preview app (hot reload, sidebar) for files under `src/namespaces/` |
 
-The Husky `pre-commit` hook runs `npm run check` and `npm run typecheck`.
+The Husky `pre-commit` hook runs `npm run check` and `npm run typecheck`. The workflow message's export is Go `html/template` syntax: its fields are `.Subject`, `.Headline`, `.ProducerName`, `.LogoURL`, `.Initial`, `.MarkColor`, `.MarkInk`, `.Body` (HTML) and `.UnsubscribeURL`.
 
 ## Testing emails
 
@@ -235,6 +237,9 @@ Templates are organised into two namespaces. Import them from `event` or `backof
 | Ticket — cancelled (holder of a transferred ticket) | `event.TicketCancelled` | `event.TicketCancelledProps` |
 | Complimentary ticket — link only | `event.CourtesyTicket` | `event.CourtesyTicketProps` |
 | Complimentary ticket — QR in email | `event.CourtesyTicketWithQRCode` | `event.CourtesyTicketWithQRCodeProps` |
+| Purchase — payment refused | `event.PurchaseRejected` | `event.PurchaseRejectedProps` |
+| Event announcement | `event.EventAnnouncement` | `event.EventAnnouncementProps` |
+| Workflow "Enviar e-mail" (rendered in Go from `exports/workflow-message.html`) | `event.WorkflowMessage` | `event.WorkflowMessageProps` |
 
 ### `backoffice` namespace
 
@@ -243,6 +248,7 @@ Templates are organised into two namespaces. Import them from `event` or `backof
 | First account setup (post-contract) | `backoffice.AccountInvite` | `backoffice.AccountInviteProps` |
 | Team member invite | `backoffice.AccountMemberInvite` | `backoffice.AccountMemberInviteProps` |
 | Password reset | `backoffice.AccountMemberPasswordReset` | `backoffice.AccountMemberPasswordResetProps` |
+| Billing receipt (PDF attached by the API) | `backoffice.BillingReceipt` | `backoffice.BillingReceiptProps` |
 
 ### Full example — ticket purchase receipt
 

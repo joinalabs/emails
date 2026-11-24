@@ -1,6 +1,6 @@
 {
   "name": "@joinalabs/emails",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "description": "React Email templates for Joina event SaaS flows",
   "type": "module",
   "main": "./dist/index.js",
@@ -14,6 +14,7 @@
   },
   "files": [
     "dist",
+    "exports",
     "scripts/husky-if-present.mjs"
   ],
   "scripts": {
@@ -23,7 +24,9 @@
     "typecheck": "tsc --noEmit",
     "dev": "email dev --dir src/preview",
     "prepare": "node scripts/husky-if-present.mjs",
-    "prepublishOnly": "npm run build && npm run check && npm run typecheck"
+    "prepublishOnly": "npm run build && npm run check && npm run typecheck && npm test",
+    "export": "node --import tsx scripts/export-workflow-message.tsx",
+    "test": "node --import tsx --test scripts/templates.test.tsx"
   },
   "engines": {
     "node": ">=20"
@@ -47,6 +50,7 @@
     "react-dom": "^19.0.0",
     "react-email": "^6.0.0",
     "tsup": "^8.4.0",
+    "tsx": "^4.23.15",
     "typescript": "^5.8.0"
   },
   "license": "UNLICENSED",
