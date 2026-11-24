@@ -15,6 +15,8 @@ export type {
   CustomerAuthMagicLinkProps,
 } from "./CustomerAuthMagicLink/index.js";
 export { CustomerAuthMagicLink } from "./CustomerAuthMagicLink/index.js";
+export type { EventAnnouncementCopy, EventAnnouncementProps } from "./EventAnnouncement/index.js";
+export { EventAnnouncement } from "./EventAnnouncement/index.js";
 export type {
   PurchaseCancellationReceivedCopy,
   PurchaseCancellationReceivedProps,
@@ -27,6 +29,8 @@ export type {
   PurchaseChargedBackProps,
 } from "./PurchaseChargedBack/index.js";
 export { PurchaseChargedBack } from "./PurchaseChargedBack/index.js";
+export type { PurchaseRejectedCopy, PurchaseRejectedProps } from "./PurchaseRejected/index.js";
+export { PurchaseRejected } from "./PurchaseRejected/index.js";
 export type { TicketCopy, TicketProps } from "./Ticket/index.js";
 export { Ticket } from "./Ticket/index.js";
 export type { TicketCancelledCopy, TicketCancelledProps } from "./TicketCancelled/index.js";
@@ -46,3 +50,5 @@ export type {
   TransferredTicketReceivedProps,
 } from "./TransferredTicketReceived/index.js";
 export { TransferredTicketReceived } from "./TransferredTicketReceived/index.js";
+export type { WorkflowMessageCopy, WorkflowMessageProps } from "./WorkflowMessage/index.js";
+export { WorkflowMessage } from "./WorkflowMessage/index.js";
